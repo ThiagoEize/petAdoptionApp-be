@@ -47,9 +47,9 @@ function deleteUserModel(userId) {
     }
 }
 
-function doesUserExistModel(userName) {
+function doesUserExistModel(userName, userLastName) {
     const allUsers = readAllUsersModel();
-    const foundUser = allUsers.find(user => user.name === userName)
+    const foundUser = allUsers.find(user => (user.userName === userName && user.userLastName === userLastName))
     return foundUser
 }
 

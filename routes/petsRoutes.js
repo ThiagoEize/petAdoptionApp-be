@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.get('/', PetsController.getPets);
 
+router.get('/user/:userId', PetsController.getUserPets);
+
 router.get('/:petId', PetsController.getPet);
 
 router.post('/',

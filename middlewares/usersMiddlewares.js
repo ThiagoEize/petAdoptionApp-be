@@ -4,8 +4,8 @@ const { doesUserExistModel } = require('../models/usersModels');
 
 
 function checkIfUserExists(req, res, next) {
-    const { name } = req.body;
-    const user = doesUserExistModel(name);
+    const { userName, userLastName } = req.body;
+    const user = doesUserExistModel(userName, userLastName);
 
     if (user) {
         res.status(400).send('User already exists');

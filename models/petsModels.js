@@ -14,12 +14,18 @@ function readPetModel(petId) {
     return selectedPet;
 }
 
+function readUserPetsModel(userId) {
+    const allPets = readAllPetsModel();
+    const selectedPets = allPets.filter((pet) => pet.userId === userId);
+    return selectedPets;
+}
+
 function addPetsModel(newPet) {
     try {
-        const allCounties = readAllPetsModel();
-        allCounties.push(newPet);
-        fs.writeFileSync(pathToPetsDb, JSON.stringify(allCounties));
-        return allCounties;
+        const allPets = readAllPetsModel();
+        allPets.push(newPet);
+        fs.writeFileSync(pathToPetsDb, JSON.stringify(allPets));
+        return allPets;
     } catch (err) {
         console.log(err);
     }
@@ -47,10 +53,18 @@ function deletePetModel(petId) {
     }
 }
 
-function doesPetExistModel(petName) {
+function doesPetExistModel(typeId, breedId, petName, color, petBio) {
     const allPets = readAllPetsModel();
-    const foundPet = allPets.find(pet => pet.name === petName)
+    const foundPet = allPets.find(pet => (
+        pet.typeId === typeId &&
+        pet.petName === petName &&
+        pet.breedId === breedId &&
+        pet.color === color &&
+        pet.petBio === petBio
+    )
+    )
+    console.log(foundPet)
     return foundPet
 }
 
-module.exports = { readAllPetsModel, readPetModel, addPetsModel, doesPetExistModel, deletePetModel };
+module.exports = { readAllPetsModel, readPetModel, addPetsModel, doesPetExistModel, readUserPetsModel, deletePetModel };

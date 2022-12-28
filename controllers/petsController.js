@@ -1,14 +1,9 @@
 // const { addPetModel, readAllPetsModel, deletePetModel } = require('../models/petsModels');
-const { addPetsModel, readAllPetsModel, readPetModel, deletePetModel } = require('../models/petsModels');
+const { addPetsModel, readAllPetsModel, readPetModel, readUserPetsModel, deletePetModel } = require('../models/petsModels');
 const { v4: uuidv4 } = require('uuid');
 
 const getPets = (req, res) => {
     try {
-        // const {
-        //     user, type, breed, name, adoptionStatus,
-        //     minHeight, maxHeight, minWeight,
-        //     maxWeight, color, minAge, maxAge
-        // } = req.query;
         let where;
 
         function isNumeric(num) {
@@ -26,6 +21,17 @@ const getPets = (req, res) => {
 
         const allPets = readAllPetsModel();
         res.send(allPets);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}
+
+const getUserPets = (req, res) => {
+    try {
+        const { userId } = req.params;
+        const pet = readUserPetsModel(userId);
+        res.send(pet);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
@@ -81,4 +87,4 @@ function deletePet(req, res) {
     }
 }
 
-module.exports = { addPet, getPets, getPet, deletePet }
+module.exports = { addPet, getPets, getPet, getUserPets, deletePet }

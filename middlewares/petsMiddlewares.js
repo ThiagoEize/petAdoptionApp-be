@@ -4,8 +4,8 @@ const { doesPetExistModel } = require('../models/petsModels');
 
 
 function checkIfPetExists(req, res, next) {
-    const { name } = req.body;
-    const pet = doesPetExistModel(name);
+    const { typeId, petName, breedId, color, petBio } = req.body;
+    const pet = doesPetExistModel(typeId, breedId, petName, color, petBio);
 
     if (pet) {
         res.status(400).send('Pet already exists');
