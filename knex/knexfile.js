@@ -1,9 +1,9 @@
 const path = require('path');
 require('dotenv').config();
+const pathToMigrations = path.resolve(__dirname, '../migrations')
 
-const pathToMigration = path.resolve(__dirname, '..migrations')
 module.exports = {
-  client: 'mysql',
+  client: 'mysql2',
   connection: {
     database: process.env.DATABASE_NAME,
     user: process.env.DATABASE_USER,
@@ -16,6 +16,6 @@ module.exports = {
   },
   migrations: {
     tableName: 'knex_migrations',
-    directory: pathToMigration
+    directory: pathToMigrations
   }
 };

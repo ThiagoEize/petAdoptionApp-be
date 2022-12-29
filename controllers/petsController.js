@@ -4,21 +4,21 @@ const { v4: uuidv4 } = require('uuid');
 
 const getPets = (req, res) => {
     try {
-        let where;
+        let where = '';
 
         function isNumeric(num) {
             return !isNaN(num)
         }
-
+        console.log(req.query)
         for (const key in req.query) {
-            where = where + req.query[key] && where ? 'where' : ' and';
+            where += req.query[key] && where == '' ? 'where' : ' and';
             if (isNumeric(req.query[key])) {
                 where += ` ${key} like '${req.query[key]}'`;
             } else {
                 where += ` ${key} = '%${req.query[key]}%'`;
             }
         }
-
+        console.log(where)
         const allPets = readAllPetsModel();
         res.send(allPets);
     } catch (err) {
