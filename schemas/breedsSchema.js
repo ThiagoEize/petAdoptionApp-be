@@ -5,9 +5,9 @@ const breedsSchema = {
         specieId: { type: "integer" },
         breedName: { type: "string" },
         isHypoallergenic: { type: "boolean" },
-        dateCreated: { type: "string", format: "date-time" }
+        dateCreated: { type: "string" }
     },
-    required: ["specieId", "breedName", "isHypoallergenic"],
+    required: ["specieId", "breedName"],
     additionalProperties: false
 };
 

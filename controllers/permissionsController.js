@@ -3,7 +3,7 @@ const PermissionsModel = require('../models/permissionsModel');
 async function getPermissions(req, res) {
     try {
         const query = req.query;
-        console.log(query)
+
         const permissions = await PermissionsModel.readAllPermissionsModel(query);
         res.send({
             success: true,

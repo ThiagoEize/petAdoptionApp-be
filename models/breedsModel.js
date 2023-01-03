@@ -33,7 +33,7 @@ async function readBreedModel(breedId) {
             .select('breeds.*', 'species.specieName')
             .where({ 'breeds.id': breedId })
             .first()
-        // console.log('readBreedModel', breed)
+
         return breed
     } catch (err) {
         console.log(err);
@@ -45,7 +45,7 @@ async function addBreedModel(newBreed) {
         const [id] = await dbConnection('breeds')
             .insert(newBreed)
         const newRegister = await readBreedModel(id)
-
+        console.log('breedsModel', newRegister)
         return newRegister
     } catch (err) {
         console.log(err);
@@ -87,6 +87,25 @@ async function doesBreedExistModel(email) {
     }
 }
 
+async function isNewBreedModel(breedName, specieId, id) {
+    try {
+        const query = dbConnection.from('breeds')
+            .where(
+                {
+                    specieId: specieId,
+                    breedName: breedName
+                }
+            );
+        if (id) {
+            query.andWhere('id', '!=', id);
+        }
+        const user = await query.first();
+        return user;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     readAllBreedsModel,
     readBreedModel,
@@ -94,5 +113,6 @@ module.exports = {
     doesBreedExistModel,
     editBreedModel,
     deleteBreedModel,
-    getBreedByNameModel
+    getBreedByNameModel,
+    isNewBreedModel
 };

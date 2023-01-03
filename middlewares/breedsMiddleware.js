@@ -1,14 +1,16 @@
 const Ajv = require('ajv');
 const ajv = new Ajv();
-const PetsModel = require('../models/petsModel');
+const BreedsModel = require('../models/breedsModel');
 
-const isNewPet = async (req, res, next) => {
-    const { petName, breedId, color, petBio } = req.body;
-    const pet = await PetsModel.isNewPetModel(breedId, petName, color, petBio);
-    if (pet) {
-        res.status(400).send('Pet already exists');
+const isNewBreed = async (req, res, next) => {
+    const { breedId } = req.params;
+    const { specieId, breedName } = req.body;
+    const breed = await BreedsModel.isNewBreedModel(breedName, specieId, breedId);
+    if (breed) {
+        res.status(400).send('Breed already exists');
         return;
     }
     next();
 };
-module.exports = { isNewPet };
+
+module.exports = { isNewBreed };

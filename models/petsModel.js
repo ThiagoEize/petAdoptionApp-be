@@ -107,15 +107,19 @@ async function doesPetExistModel(breedId, petName, color, petBio) {
     }
 }
 
-async function isNewPetModel(breedId, petName, color, petBio) {
+async function isNewPetModel(breedId, petName, color, petBio, id) {
     try {
-        const pet = await dbConnection.from('pets')
+        const query = dbConnection.from('pets')
             .where({
                 breedId: breedId,
                 petName: petName,
                 color: color,
                 petBio: petBio
-            }).first()
+            })
+        if (id) {
+            query.andWhere('id', '!=', id);
+        }
+        const pet = await query.first();
         return pet
     } catch (err) {
         console.log(err);

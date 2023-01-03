@@ -46,7 +46,7 @@ async function readUserModel(userId) {
             .select('users.*', 'permissions.permissionName')
             .where({ 'users.id': userId })
             .first()
-        console.log('readUserModel', user)
+
         return user
     } catch (err) {
         console.log(err);
@@ -100,6 +100,19 @@ async function doesUserExistModel(email) {
     }
 }
 
+async function isNewUserModel(email, id) {
+    try {
+        const query = dbConnection.from('users').where({ email: email });
+        if (id) {
+            query.andWhere('id', '!=', id);
+        }
+        const user = await query.first();
+        return user;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     readAllUsersModel,
     readUserModel,
@@ -108,5 +121,6 @@ module.exports = {
     editUserModel,
     deleteUserModel,
     getUserByEmailModel,
-    getUserByNameModel
+    getUserByNameModel,
+    isNewUserModel
 };

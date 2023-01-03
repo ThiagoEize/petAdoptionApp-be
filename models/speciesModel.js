@@ -51,10 +51,27 @@ async function deleteSpecieModel(specieId) {
     }
 }
 
+async function isNewSpecieModel(specieName, id) {
+    try {
+        const query = dbConnection.from('species')
+            .where(
+                { specieName: specieName }
+            );
+        if (id) {
+            query.andWhere('id', '!=', id);
+        }
+        const user = await query.first();
+        return user;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     readAllSpeciesModel,
     readSpecieModel,
     addSpecieModel,
     editSpecieModel,
-    deleteSpecieModel
+    deleteSpecieModel,
+    isNewSpecieModel
 };

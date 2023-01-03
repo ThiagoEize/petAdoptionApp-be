@@ -1,11 +1,11 @@
 const Ajv = require('ajv');
 const ajv = new Ajv();
-const { doesUserExistModel } = require('../models/usersModel');
+const UsersModel = require('../models/usersModel');
 
 
 function checkIfUserExists(req, res, next) {
     const { email } = req.body;
-    const user = doesUserExistModel(email);
+    const user = UsersModel.doesUserExistModel(email);
 
     if (!user) {
         res.status(400).send('User with this email does not exist');
@@ -15,15 +15,15 @@ function checkIfUserExists(req, res, next) {
     next();
 }
 
-function validateBody(schema) {
-    return (req, res, next) => {
-        const valid = ajv.validate(schema, req.body);
-        if (!valid) {
-            res.status(400).send(ajv.errors[0].message);
-            return;
-        }
-        next();
-    };
-}
+const isNewUser = async (req, res, next) => {
+    const { userId } = req.params;
+    const { email } = req.body;
+    const user = await UsersModel.isNewUserModel(email, userId);
+    if (user) {
+        res.status(400).send('User already exists');
+        return;
+    }
+    next();
+};
 
-module.exports = { checkIfUserExists, validateBody };
+module.exports = { checkIfUserExists, isNewUser };

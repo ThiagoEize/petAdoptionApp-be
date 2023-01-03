@@ -4,7 +4,7 @@ const getBreeds = async (req, res) => {
     try {
         const query = req.query;
         const allBreeds = await BreedsModel.readAllBreedsModel(query);
-        console.log(allBreeds)
+
         res.send({
             success: true,
             data: allBreeds
@@ -19,7 +19,7 @@ const getBreed = async (req, res) => {
     try {
         const { breedId } = req.params;
         const breed = await BreedsModel.readBreedModel(breedId);
-        console.log(breed)
+
         res.send({
             success: true,
             data: breed
@@ -34,9 +34,12 @@ const addBreed = async (req, res) => {
     try {
         const newBreed = req.body;
         const breedAdded = await BreedsModel.addBreedModel(newBreed);
-        console.log(breedAdded)
+        console.log('updateBreedController', breedAdded)
         if (breedAdded) {
-            res.send(newBreed);
+            res.send({
+                success: true,
+                data: breedAdded
+            });
         }
     } catch (err) {
         console.log(err);
@@ -48,10 +51,8 @@ const editBreed = async (req, res) => {
     try {
         const updatedBreed = req.body;
         const updated = await BreedsModel.editBreedModel(req.params.breedId, updatedBreed);
-        res.send({
-            success: true,
-            data: updated
-        });
+        console.log('updateBreedController', updated)
+        res.send(updated);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

@@ -69,4 +69,28 @@ async function readUserPermissionsModel(userId) {
     }
 }
 
-module.exports = { readAllPermissionsModel, readPermissionModel, addPermissionModel, editPermissionModel, deletePermissionModel, readUserPermissionsModel };
+async function isNewPermissionModel(permissionName, id) {
+    try {
+        const query = dbConnection.from('permissions')
+            .where(
+                { permissionName: permissionName }
+            );
+        if (id) {
+            query.andWhere('id', '!=', id);
+        }
+        const user = await query.first();
+        return user;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+module.exports = {
+    readAllPermissionsModel,
+    readPermissionModel,
+    addPermissionModel,
+    editPermissionModel,
+    deletePermissionModel,
+    readUserPermissionsModel,
+    isNewPermissionModel
+};

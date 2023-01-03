@@ -1,7 +1,7 @@
 const express = require('express');
 const BreedsController = require('../controllers/breedsController');
-// const Middleware = require('../middlewares/breedsMiddleware');
-const GlobalMiddleware = require('../middlewares/usersMiddleware');
+const Middleware = require('../middlewares/breedsMiddleware');
+const GlobalMiddleware = require('../middlewares/globalMiddleware');
 const { breedsSchema } = require('../schemas/breedsSchema');
 
 const router = express.Router();
@@ -16,12 +16,13 @@ router.get('/:breedId', BreedsController.getBreed);
 
 router.post('/',
     GlobalMiddleware.validateBody(breedsSchema),
-    // Middleware.checkIfBreedExists,
+    Middleware.isNewBreed,
     BreedsController.addBreed
 );
 
 router.put('/:breedId',
     GlobalMiddleware.validateBody(breedsSchema),
+    Middleware.isNewBreed,
     BreedsController.editBreed
 );
 

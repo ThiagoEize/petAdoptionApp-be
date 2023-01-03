@@ -5,7 +5,7 @@ const savedPetsSchema = {
         userId: { type: "integer" },
         petId: { type: "integer" },
         personalComentary: { type: "string" },
-        dateCreated: { type: "string", format: "date-time" }
+        dateCreated: { type: "string" }
     },
     required: ["userId", "petId"],
     additionalProperties: false

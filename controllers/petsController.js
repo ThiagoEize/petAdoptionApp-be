@@ -3,7 +3,7 @@ const PetsModel = require('../models/PetsModel');
 async function getPets(req, res) {
     try {
         const query = req.query;
-        console.log(query)
+
         const pets = await PetsModel.readAllPetsModel(query);
         res.send({
             success: true,

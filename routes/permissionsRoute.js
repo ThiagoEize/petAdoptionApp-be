@@ -2,7 +2,8 @@ const express = require('express');
 const PermissionsController = require('../controllers/permissionsController');
 // const Middleware = require('../middlewares/permissionsMiddleware');
 const { permissionsSchema } = require('../schemas/permissionsSchema');
-const GlobalMiddleware = require('../middlewares/usersMiddleware');
+const GlobalMiddleware = require('../middlewares/globalMiddleware');
+const Middleware = require('../middlewares/permissionsMiddleware');
 
 const router = express.Router();
 
@@ -14,12 +15,13 @@ router.get('/:permissionId', PermissionsController.getPermission);
 
 router.post('/',
     GlobalMiddleware.validateBody(permissionsSchema),
-    // Middleware.checkIfPermissionExists,
+    Middleware.isNewPermission,
     PermissionsController.addPermission
 );
 
 router.put('/:permissionId',
     GlobalMiddleware.validateBody(permissionsSchema),
+    Middleware.isNewPermission,
     PermissionsController.editPermission
 );
 

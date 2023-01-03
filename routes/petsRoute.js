@@ -22,6 +22,7 @@ router.post('/',
 
 router.put('/:petId',
     GlobalMiddleware.validateBody(petsSchema),
+    Middleware.isNewPet,
     PetsController.editPet
 );
 

@@ -7,7 +7,7 @@ const permissionsSchema = {
         canAcceptAdoptionRequests: { type: "boolean" },
         canAdoptFosterPets: { type: "boolean" },
         canAdoptPets: { type: "boolean" },
-        dateCreated: { type: "string", format: "date-time" }
+        dateCreated: { type: "string" }
     },
     required: ["permissionName", "canEditCreateAdmins", "canEditUsersPermissions", "canAcceptAdoptionRequests", "canAdoptFosterPets", "canAdoptPets"],
     additionalProperties: false

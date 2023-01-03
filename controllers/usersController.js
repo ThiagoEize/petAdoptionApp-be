@@ -4,7 +4,7 @@ const getUsers = async (req, res) => {
     try {
         const query = req.query;
         const allUsers = await UsersModel.readAllUsersModel(query);
-        console.log(allUsers)
+
         res.send({
             success: true,
             data: allUsers

@@ -3,7 +3,7 @@ const speciesSchema = {
     properties: {
         id: { type: "integer" },
         specieName: { type: "string" },
-        dateCreated: { type: "string", format: "date-time" }
+        dateCreated: { type: "string" }
     },
     required: ["specieName"],
     additionalProperties: false
