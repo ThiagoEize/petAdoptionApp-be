@@ -1,14 +1,14 @@
 const Ajv = require('ajv');
 const ajv = new Ajv();
-const { doesUserExistModel } = require('../models/usersModels');
+const { doesUserExistModel } = require('../models/usersModel');
 
 
 function checkIfUserExists(req, res, next) {
-    const { userName, userLastName } = req.body;
-    const user = doesUserExistModel(userName, userLastName);
+    const { email } = req.body;
+    const user = doesUserExistModel(email);
 
-    if (user) {
-        res.status(400).send('User already exists');
+    if (!user) {
+        res.status(400).send('User with this email does not exist');
         return;
     }
 

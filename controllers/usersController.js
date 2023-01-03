@@ -1,56 +1,39 @@
-// const { addUserModel, readAllUsersModel, deleteUserModel } = require('../models/usersModels');
-const { addUsersModel, readAllUsersModel, readUserModel, deleteUserModel } = require('../models/usersModels');
-const { v4: uuidv4 } = require('uuid');
+const UsersModel = require('../models/usersModel');
 
-const getUsers = (req, res) => {
+const getUsers = async (req, res) => {
     try {
-        // const {
-        //     user, type, breed, name, adoptionStatus,
-        //     minHeight, maxHeight, minWeight,
-        //     maxWeight, color, minAge, maxAge
-        // } = req.query;
-        let where;
-
-        function isNumeric(num) {
-            return !isNaN(num)
-        }
-
-        for (const key in req.query) {
-            where = where + req.query[key] && where ? 'where' : ' and';
-            if (isNumeric(req.query[key])) {
-                where += ` ${key} like '${req.query[key]}'`;
-            } else {
-                where += ` ${key} = '%${req.query[key]}%'`;
-            }
-        }
-
-        const allUsers = readAllUsersModel();
-        res.send(allUsers);
+        const query = req.query;
+        const allUsers = await UsersModel.readAllUsersModel(query);
+        console.log(allUsers)
+        res.send({
+            success: true,
+            data: allUsers
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 }
 
-const getUser = (req, res) => {
+const getUser = async (req, res) => {
     try {
         const { userId } = req.params;
-        const user = readUserModel(userId);
-        res.send(user);
+        const user = await UsersModel.readUserModel(userId);
+        res.send({
+            success: true,
+            data: user
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 }
 
-const addUser = (req, res) => {
+const addUser = async (req, res) => {
     try {
-        const newUser = {
-            ...req.body,
-            id: uuidv4(),
-            date: new Date(),
-        };
-        const userAdded = addUsersModel(newUser);
+        const newUser = req.body;
+        const userAdded = await UsersModel.addUserModel(newUser);
+        console.log(userAdded)
         if (userAdded) {
             res.send(newUser);
         }
@@ -60,25 +43,26 @@ const addUser = (req, res) => {
     }
 }
 
-// const updateUser = (req, res) => {
-//     try {
-//         const { userId } = req.params;
-//         const userUpdated = addUsersModel(userId, ...req.body);
-//         if (userUpdated) {
-//             res.send(...req.body);
-//         }
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).send(err);
-//     }
-// }
+const editUser = async (req, res) => {
+    try {
+        const updatedUser = req.body;
+        const updated = await UsersModel.editUserModel(req.params.userId, updatedUser);
+        res.send({
+            success: true,
+            data: updated
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}
 
-function deleteUser(req, res) {
+async function deleteUser(req, res) {
     const { userId } = req.params;
-    const deleted = deleteUserModel(userId);
+    const deleted = await UsersModel.deleteUserModel(userId);
     if (deleted) {
         res.send({ ok: true, deletedId: userId });
     }
 }
 
-module.exports = { addUser, getUsers, getUser, deleteUser }
+module.exports = { addUser, getUsers, getUser, editUser, deleteUser }

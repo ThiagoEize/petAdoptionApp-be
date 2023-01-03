@@ -1,90 +1,85 @@
-// const { addPetModel, readAllPetsModel, deletePetModel } = require('../models/petsModels');
-const { addPetsModel, readAllPetsModel, readPetModel, readUserPetsModel, deletePetModel } = require('../models/petsModels');
-const { v4: uuidv4 } = require('uuid');
+const PetsModel = require('../models/PetsModel');
 
-const getPets = (req, res) => {
+async function getPets(req, res) {
     try {
-        let where = '';
-
-        function isNumeric(num) {
-            return !isNaN(num)
-        }
-        console.log(req.query)
-        for (const key in req.query) {
-            where += req.query[key] && where == '' ? 'where' : ' and';
-            if (isNumeric(req.query[key])) {
-                where += ` ${key} like '${req.query[key]}'`;
-            } else {
-                where += ` ${key} = '%${req.query[key]}%'`;
-            }
-        }
-        console.log(where)
-        const allPets = readAllPetsModel();
-        res.send(allPets);
+        const query = req.query;
+        console.log(query)
+        const pets = await PetsModel.readAllPetsModel(query);
+        res.send({
+            success: true,
+            data: pets
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 }
 
-const getUserPets = (req, res) => {
+async function getPet(req, res) {
     try {
-        const { userId } = req.params;
-        const pet = readUserPetsModel(userId);
-        res.send(pet);
+        const pet = await PetsModel.readPetModel(req.params.petId);
+        res.send({
+            success: true,
+            data: pet
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 }
 
-const getPet = (req, res) => {
+async function getUserPets(req, res) {
     try {
-        const { petId } = req.params;
-        const pet = readPetModel(petId);
-        res.send(pet);
+        const userPets = await PetsModel.readUserPetsModel(req.params.userId);
+        res.send({
+            success: true,
+            data: userPets
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 }
 
-const addPet = (req, res) => {
+async function addPet(req, res) {
     try {
-        const newPet = {
-            ...req.body,
-            id: uuidv4(),
-            date: new Date(),
-        };
-        const petAdded = addPetsModel(newPet);
-        if (petAdded) {
-            res.send(newPet);
-        }
+        const newPet = req.body;
+        const savedPet = await PetsModel.addPetModel(newPet);
+        res.send({
+            success: true,
+            data: savedPet
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 }
 
-// const updatePet = (req, res) => {
-//     try {
-//         const { petId } = req.params;
-//         const petUpdated = addPetsModel(petId, ...req.body);
-//         if (petUpdated) {
-//             res.send(...req.body);
-//         }
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).send(err);
-//     }
-// }
-
-function deletePet(req, res) {
-    const { petId } = req.params;
-    const deleted = deletePetModel(petId);
-    if (deleted) {
-        res.send({ ok: true, deletedId: petId });
+async function editPet(req, res) {
+    try {
+        const updatedPet = req.body;
+        const updated = await PetsModel.editPetModel(req.params.petId, updatedPet);
+        res.send({
+            success: true,
+            data: updated
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
     }
 }
 
-module.exports = { addPet, getPets, getPet, getUserPets, deletePet }
+async function deletePet(req, res) {
+    try {
+        const deleted = await PetsModel.deletePetModel(req.params.petId);
+        res.send({
+            success: true,
+            data: deleted
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}
+
+module.exports = { addPet, getPets, getPet, getUserPets, editPet, deletePet }

@@ -1,0 +1,134 @@
+const dbConnection = require('../knex/knex')
+
+async function readAllPetsModel(query) {
+    try {
+        const petsList = await dbConnection.from('pets')
+            .leftJoin('breeds', 'breeds.id', '=', 'pets.breedId')
+            .leftJoin('species', 'species.id', '=', 'breeds.specieId')
+            .leftJoin('users', 'users.id', '=', 'pets.userId')
+            .select(
+                'pets.*',
+                'users.userName',
+                'species.specieName',
+                'breeds.breedName',
+            )
+            .where(query)
+        return petsList
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function readPetModel(petId) {
+    try {
+        const pet = await dbConnection.from('pets')
+            .leftJoin('breeds', 'breeds.id', '=', 'pets.breedId')
+            .leftJoin('species', 'species.id', '=', 'breeds.specieId')
+            .leftJoin('users', 'users.id', '=', 'pets.userId')
+            .select(
+                'pets.*',
+                'users.userName',
+                'species.specieName',
+                'breeds.breedName',
+            )
+            .where({ 'pets.id': petId })
+            .first()
+        return pet
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function readUserPetsModel(userId) {
+    try {
+        const userPets = await dbConnection.from('pets')
+            .leftJoin('breeds', 'breeds.id', '=', 'pets.breedId')
+            .leftJoin('species', 'species.id', '=', 'breeds.specieId')
+            .leftJoin('users', 'users.id', '=', 'pets.userId')
+            .select(
+                'pets.*',
+                'users.userName',
+                'species.specieName',
+                'breeds.breedName',
+            )
+            .where({ userId: userId })
+        return userPets
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function addPetModel(newPet) {
+    try {
+        const [id] = await dbConnection('pets')
+            .insert(newPet)
+
+        const newRegister = await readPetModel(id)
+        return newRegister
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+async function editPetModel(petId, updatedPet) {
+    try {
+        await dbConnection('pets')
+            .where('id', petId)
+            .update(updatedPet)
+
+        const updatedRegister = await readPetModel(petId)
+        return updatedRegister
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+async function deletePetModel(petId) {
+    try {
+        const deleted = await dbConnection.from('pets').where({ id: petId }).del()
+        return deleted
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function doesPetExistModel(breedId, petName, color, petBio) {
+    try {
+        const pet = await dbConnection.from('pets')
+            .where({
+                breedId: breedId,
+                petName: petName,
+                color: color,
+                petBio: petBio
+            }).first()
+        return pet
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function isNewPetModel(breedId, petName, color, petBio) {
+    try {
+        const pet = await dbConnection.from('pets')
+            .where({
+                breedId: breedId,
+                petName: petName,
+                color: color,
+                petBio: petBio
+            }).first()
+        return pet
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+module.exports = {
+    readAllPetsModel,
+    readPetModel,
+    addPetModel,
+    editPetModel,
+    doesPetExistModel,
+    isNewPetModel,
+    readUserPetsModel,
+    deletePetModel
+};

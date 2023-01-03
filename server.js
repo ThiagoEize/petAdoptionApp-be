@@ -1,24 +1,26 @@
 const express = require('express');
-const fs = require('fs');
 const app = express();
 // const morgan = require('morgan');
 require('dotenv').config();
 
-const { petsSchema } = require('./schemas/petsSchema');
-
 // const usersRoutes = require('./routes/usersRoutes')
-const petsRoutes = require('./routes/petsRoutes')
-const usersRoutes = require('./routes/usersRoutes')
-const { v4: uuidv4 } = require('uuid');
+const permissionsRoute = require('./routes/permissionsRoute')
+const usersRoute = require('./routes/usersRoute')
+const speciesRoute = require('./routes/speciesRoute')
+const breedsRoute = require('./routes/breedsRoute')
+const petsRoute = require('./routes/petsRoute')
+
 const PORT = process.env.PORT || 8080;
 
 const dbConnection = require('./knex/knex');
 
 app.use(express.json());
 
-app.use('/users', usersRoutes);
-// app.use('/user', usersRoutes);
-app.use('/pets', petsRoutes);
+app.use('/permissions', permissionsRoute);
+app.use('/users', usersRoute);
+app.use('/species', speciesRoute);
+app.use('/breeds', breedsRoute);
+app.use('/pets', petsRoute);
 
 dbConnection.migrate.latest().then((migration) => {
     if (migration) {

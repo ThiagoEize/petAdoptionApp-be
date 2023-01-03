@@ -1,16 +1,17 @@
 const usersSchema = {
     type: "object",
     properties: {
-        permissionId: { type: "string" },
+        permissionId: { type: "integer" },
         email: { type: "string" },
         password: { type: "string" },
-        userName: { type: "string", minLength: 3, maxLength: 18 },
-        userLastName: { type: "string", minLength: 3, maxLength: 18 },
-        phoneNumber: { type: "string", minLength: 7, maxLength: 12 },
-        userBio: { type: "string", minLength: 6, maxLength: 60 }
+        userName: { type: "string" },
+        userLastName: { type: "string" },
+        phoneNumber: { type: "string" },
+        userBio: { type: "string" },
+        dateCreated: { type: "string" }
     },
     required: ["permissionId", "email", "password", "userName", "userLastName", "phoneNumber", "userBio"],
-    additionalProperties: false,
+    additionalProperties: false
 };
 
-module.exports = { usersSchema }
+module.exports = { usersSchema };

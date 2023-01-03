@@ -1,6 +1,7 @@
 const express = require('express');
 const PetsController = require('../controllers/petsController');
-const Middlewares = require('../middlewares/petsMiddlewares');
+const Middleware = require('../middlewares/petsMiddleware');
+const GlobalMiddleware = require('../middlewares/globalMiddleware');
 const { petsSchema } = require('../schemas/petsSchema');
 
 const router = express.Router();
@@ -14,9 +15,14 @@ router.get('/user/:userId', PetsController.getUserPets);
 router.get('/:petId', PetsController.getPet);
 
 router.post('/',
-    Middlewares.validateBody(petsSchema),
-    Middlewares.checkIfPetExists,
+    GlobalMiddleware.validateBody(petsSchema),
+    Middleware.isNewPet,
     PetsController.addPet
+);
+
+router.put('/:petId',
+    GlobalMiddleware.validateBody(petsSchema),
+    PetsController.editPet
 );
 
 router.delete('/:petId', PetsController.deletePet);

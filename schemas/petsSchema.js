@@ -1,20 +1,24 @@
 const petsSchema = {
     type: "object",
     properties: {
-        userId: { type: "string" },
-        typeId: { type: "string" },
-        breedId: { type: "string" },
-        petName: { type: "string", "minLength": 2, "maxLength": 18 },
-        adoptionStatus: { type: "string" },
+        id: { type: "integer" },
+        userId: { type: "integer" },
+        breedId: { type: "integer" },
+        petName: { type: "string", minLength: 3, maxLength: 18 },
+        adoptionStatus: {
+            type: "string",
+            enum: ["Adopted", "Fostered", "Available"]
+        },
         picture: { type: "string" },
+        petAge: { type: "string" },
         height: { type: "string" },
         weight: { type: "string" },
-        color: { type: "string", "minLength": 3, "maxLength": 18 },
-        petAge: { type: "string" },
-        petBio: { type: "string", "minLength": 6, "maxLength": 120 }
+        color: { type: "string" },
+        petBio: { type: "string", minLength: 6, maxLength: 1000 },
+        dateCreated: { type: "string" }
     },
-    required: ["typeId", "breedId", "adoptionStatus", "picture", "height", "weight", "color", "petBio", "petAge"],
-    additionalProperties: false,
+    required: ["breedId", "petName", "adoptionStatus", "picture", "petAge", "height", "weight", "color", "petBio"],
+    additionalProperties: false
 };
 
-module.exports = { petsSchema }
+module.exports = { petsSchema };
