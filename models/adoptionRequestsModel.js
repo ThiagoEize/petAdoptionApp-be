@@ -1,12 +1,36 @@
 const dbConnection = require('../knex/knex')
 
-async function readAllAdoptionRequestsModel() {
+// async function readAllAdoptionRequestsModel(query) {
+//     try {
+//         const adoptionRequestsList = await dbConnection
+//             .from('adoptionRequests')
+//             .join('users', 'users.id', '=', 'adoptionRequests.userId')
+//             .join('pets', 'pets.id', '=', 'adoptionRequests.petId')
+//             .select('adoptionRequests.*', 'users.userName', 'pets.petName')
+//             .where(query)
+//         return adoptionRequestsList
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
+
+async function readAllAdoptionRequestsModel(query) {
     try {
-        const adoptionRequestsList = await dbConnection.from('adoptionRequests')
+        let adoptionRequestsList = dbConnection
+            .from('adoptionRequests')
             .join('users', 'users.id', '=', 'adoptionRequests.userId')
             .join('pets', 'pets.id', '=', 'adoptionRequests.petId')
-            .select('adoptionRequests.*', 'users.userName', 'pets.petName')
-        return adoptionRequestsList
+        for (let [key, value] of Object.entries(query)) {
+            if (value[0] === '%') {
+                const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);
+                adoptionRequestsList = adoptionRequestsList.where(key, 'like', searchTerm);
+            } else {
+                adoptionRequestsList = adoptionRequestsList.where(key, value);
+            }
+        }
+
+        adoptionRequestsList = await adoptionRequestsList.select('adoptionRequests.*', 'users.userName', 'pets.petName');
+        return adoptionRequestsList;
     } catch (err) {
         console.log(err);
     }

@@ -1,12 +1,34 @@
 const dbConnection = require('../knex/knex')
 
-async function readAllSavedPetsModel() {
+async function readAllSavedPetsModel(query) {
+    // try {
+    //     const savedPetsList = await dbConnection.from('savedPets')
+    //         .join('users', 'users.id', '=', 'savedPets.userId')
+    //         .join('pets', 'pets.id', '=', 'savedPets.petId')
+    //         .select('savedPets.*', 'users.userName', 'pets.petName')
+    //         .where(query)
+    //     return savedPetsList
+    // } catch (err) {
+    //     console.log(err);
+    // }
+
     try {
-        const savedPetsList = await dbConnection.from('savedPets')
+        let savedPetsList = dbConnection
+            .from('savedPets')
             .join('users', 'users.id', '=', 'savedPets.userId')
             .join('pets', 'pets.id', '=', 'savedPets.petId')
-            .select('savedPets.*', 'users.userName', 'pets.petName')
-        return savedPetsList
+        for (let [key, value] of Object.entries(query)) {
+            if (value[0] === '%') {
+                const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);
+                savedPetsList = savedPetsList.where(key, 'like', searchTerm);
+            } else {
+                savedPetsList = savedPetsList.where(key, value);
+            }
+        }
+
+        savedPetsList = await savedPetsList.select('savedPets.*', 'users.userName', 'pets.petName')
+
+        return savedPetsList;
     } catch (err) {
         console.log(err);
     }

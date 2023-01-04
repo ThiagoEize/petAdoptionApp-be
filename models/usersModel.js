@@ -2,10 +2,18 @@ const dbConnection = require('../knex/knex')
 
 async function readAllUsersModel(query) {
     try {
-        const usersList = await dbConnection.from('users')
+        let usersList = dbConnection.from('users')
             .leftJoin('permissions', 'permissions.id', '=', 'users.permissionId')
-            .select('users.*', 'permissions.permissionName as permissionName')
-            .where(query)
+
+        for (let [key, value] of Object.entries(query)) {
+            if (value[0] === '%') {
+                const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);
+                usersList = usersList.where(key, 'like', searchTerm);
+            } else {
+                usersList = usersList.where(key, value);
+            }
+        }
+        usersList = await usersList.select('users.*', 'permissions.permissionName as permissionName')
         return usersList
     } catch (err) {
         console.log(err);

@@ -1,9 +1,28 @@
 const dbConnection = require('../knex/knex')
 
+// async function readAllPermissionsModel(query) {
+//     try {
+//         const permissionsList = await dbConnection.from('permissions').where(query);
+//         return permissionsList
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
+
 async function readAllPermissionsModel(query) {
     try {
-        const permissionsList = await dbConnection.from('permissions').where(query);
-        return permissionsList
+        let permissionsList = dbConnection.from('permissions');
+        for (let [key, value] of Object.entries(query)) {
+            if (value[0] === '%') {
+                const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);
+                permissionsList = permissionsList.where(key, 'like', searchTerm);
+            } else {
+                permissionsList = permissionsList.where(key, value);
+            }
+        }
+
+        permissionsList = await permissionsList.select('*');
+        return permissionsList;
     } catch (err) {
         console.log(err);
     }

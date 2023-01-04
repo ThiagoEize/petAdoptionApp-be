@@ -2,8 +2,12 @@ const adoptionRequestsModel = require('../models/adoptionRequestsModel');
 
 async function getAdoptionRequests(req, res) {
     try {
-        const adoptionRequests = await adoptionRequestsModel.readAllAdoptionRequestsModel();
-        res.send(adoptionRequests);
+        const query = req.query;
+        const adoptionRequests = await adoptionRequestsModel.readAllAdoptionRequestsModel(query);
+        res.send({
+            success: true,
+            data: adoptionRequests
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

@@ -2,8 +2,12 @@ const savedPetsModel = require('../models/savedPetsModel');
 
 async function getSavedPets(req, res) {
     try {
-        const savedPets = await savedPetsModel.readAllSavedPetsModel();
-        res.send(savedPets);
+        const query = req.query;
+        const savedPets = await savedPetsModel.readAllSavedPetsModel(query);
+        res.send({
+            success: true,
+            data: savedPets
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
@@ -13,7 +17,10 @@ async function getSavedPets(req, res) {
 async function getSavedPet(req, res) {
     try {
         const savedPet = await savedPetsModel.readSavedPetModel(req.params.savedPetId);
-        res.send(savedPet);
+        res.send({
+            success: true,
+            data: savedPet
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
@@ -23,7 +30,10 @@ async function getSavedPet(req, res) {
 async function getUserSavedPets(req, res) {
     try {
         const userSavedPets = await savedPetsModel.readUserSavedPetsModel(req.params.userId);
-        res.send(userSavedPets);
+        res.send({
+            success: true,
+            data: userSavedPets
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

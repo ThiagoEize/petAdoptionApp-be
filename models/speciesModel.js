@@ -1,8 +1,18 @@
 const dbConnection = require('../knex/knex');
 
-async function readAllSpeciesModel() {
+async function readAllSpeciesModel(query) {
     try {
-        const species = await dbConnection('species');
+        let species = dbConnection.from('species');
+        for (let [key, value] of Object.entries(query)) {
+            if (value[0] === '%') {
+                const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);
+                species = species.where(key, 'like', searchTerm);
+            } else {
+                species = species.where(key, value);
+            }
+        }
+
+        species = await species.select('*');
         return species;
     } catch (err) {
         console.log(err);

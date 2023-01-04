@@ -2,17 +2,41 @@ const dbConnection = require('../knex/knex')
 
 async function readAllPetsModel(query) {
     try {
-        const petsList = await dbConnection.from('pets')
+        // const petsList = await dbConnection.from('pets')
+        //     .leftJoin('breeds', 'breeds.id', '=', 'pets.breedId')
+        //     .leftJoin('species', 'species.id', '=', 'breeds.specieId')
+        //     .leftJoin('users', 'users.id', '=', 'pets.userId')
+        // .select(
+        //     'pets.*',
+        //     'users.userName',
+        //     'species.specieName',
+        //     'breeds.breedName',
+        // )
+        //     .where(query)
+        // return petsList
+
+        let petsList = dbConnection
+            .from('pets')
             .leftJoin('breeds', 'breeds.id', '=', 'pets.breedId')
             .leftJoin('species', 'species.id', '=', 'breeds.specieId')
             .leftJoin('users', 'users.id', '=', 'pets.userId')
+        for (let [key, value] of Object.entries(query)) {
+            if (value[0] === '%') {
+                const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);
+                petsList = petsList.where(key, 'like', searchTerm);
+            } else {
+                petsList = petsList.where(key, value);
+            }
+        }
+
+        petsList = await petsList
             .select(
                 'pets.*',
                 'users.userName',
                 'species.specieName',
                 'breeds.breedName',
             )
-            .where(query)
+
         return petsList
     } catch (err) {
         console.log(err);

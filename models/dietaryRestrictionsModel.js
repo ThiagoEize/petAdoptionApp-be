@@ -1,12 +1,33 @@
 const dbConnection = require('../knex/knex')
 
+// async function readAllDietaryRestrictionsModel(query) {
+//     try {
+//         const dietaryRestrictionsList = await dbConnection.from('dietaryRestrictions')
+//             .leftJoin('pets', 'pets.id', '=', 'dietaryRestrictions.petId')
+//             .select('dietaryRestrictions.*', 'pets.petName')
+//             .where(query)
+//         return dietaryRestrictionsList
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
+
 async function readAllDietaryRestrictionsModel(query) {
     try {
-        const dietaryRestrictionsList = await dbConnection.from('dietaryRestrictions')
+        let dietaryRestrictionsList = dbConnection
+            .from('dietaryRestrictions')
             .leftJoin('pets', 'pets.id', '=', 'dietaryRestrictions.petId')
-            .select('dietaryRestrictions.*', 'pets.petName')
-            .where(query)
-        return dietaryRestrictionsList
+        for (let [key, value] of Object.entries(query)) {
+            if (value[0] === '%') {
+                const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);
+                dietaryRestrictionsList = dietaryRestrictionsList.where(key, 'like', searchTerm);
+            } else {
+                dietaryRestrictionsList = dietaryRestrictionsList.where(key, value);
+            }
+        }
+
+        dietaryRestrictionsList = await dietaryRestrictionsList.select('dietaryRestrictions.*', 'pets.petName');
+        return dietaryRestrictionsList;
     } catch (err) {
         console.log(err);
     }

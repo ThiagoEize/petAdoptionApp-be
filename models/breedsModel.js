@@ -1,12 +1,33 @@
 const dbConnection = require('../knex/knex')
 
+// async function readAllBreedsModel(query) {
+//     try {
+//         const breedsList = await dbConnection.from('breeds')
+//             .leftJoin('species', 'species.id', '=', 'breeds.specieId')
+//             .select('breeds.*', 'species.specieName')
+//             .where(query)
+//         return breedsList
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
+
 async function readAllBreedsModel(query) {
     try {
-        const breedsList = await dbConnection.from('breeds')
+        let breedsList = dbConnection
+            .from('breeds')
             .leftJoin('species', 'species.id', '=', 'breeds.specieId')
-            .select('breeds.*', 'species.specieName')
-            .where(query)
-        return breedsList
+        for (let [key, value] of Object.entries(query)) {
+            if (value[0] === '%') {
+                const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);
+                breedsList = breedsList.where(key, 'like', searchTerm);
+            } else {
+                breedsList = breedsList.where(key, value);
+            }
+        }
+
+        breedsList = await breedsList.select('breeds.*', 'species.specieName');
+        return breedsList;
     } catch (err) {
         console.log(err);
     }
