@@ -5,9 +5,7 @@ async function readAllSavedPetsModel() {
         const savedPetsList = await dbConnection.from('savedPets')
             .join('users', 'users.id', '=', 'savedPets.userId')
             .join('pets', 'pets.id', '=', 'savedPets.petId')
-            .select('savedPets.id as id', 'users.name as userName',
-                'pets.petName as petName', 'savedPets.personalComentary',
-                'savedPets.dateCreated')
+            .select('savedPets.*', 'users.userName', 'pets.petName')
         return savedPetsList
     } catch (err) {
         console.log(err);
@@ -19,8 +17,8 @@ async function readSavedPetModel(savedPetId) {
         const savedPet = await dbConnection.from('savedPets')
             .join('users', 'users.id', '=', 'savedPets.userId')
             .join('pets', 'pets.id', '=', 'savedPets.petId')
+            .select('savedPets.*', 'users.userName', 'pets.petName')
             .where({ 'savedPets.id': savedPetId })
-            .select('savedPets.id as id', 'users.name as userName', 'pets.petName as petName', 'savedPets.personalComentary', 'savedPets.dateCreated')
             .first()
         return savedPet
     } catch (err) {
@@ -42,7 +40,10 @@ async function readUserSavedPetsModel(userId) {
 
 async function addSavedPetModel(newSavedPet) {
     try {
-        const [newRegister] = await dbConnection.from('savedPets').insert(newSavedPet).returning('*')
+        const [id] = await dbConnection('savedPets')
+            .insert(newSavedPet)
+        const newRegister = await readSavedPetModel(id)
+
         return newRegister
     } catch (err) {
         console.log(err);
@@ -51,8 +52,13 @@ async function addSavedPetModel(newSavedPet) {
 
 async function editSavedPetModel(savedPetId, updatedSavedPet) {
     try {
-        const [updated] = await dbConnection.from('savedPets').where({ id: savedPetId }).update(updatedSavedPet).returning('*')
-        return updated
+        const updated = await dbConnection.from('savedPets')
+            .where({ id: savedPetId })
+            .update(updatedSavedPet)
+
+        const updatedRegister = await readSavedPetModel(savedPetId)
+        return updatedRegister
+
     } catch (err) {
         console.log(err);
     }
@@ -83,6 +89,25 @@ async function doesSavedPetExistModel(userId, petId) {
     }
 }
 
+async function isNewSavedPetModel(userId, petId, id) {
+    try {
+        const query = dbConnection.from('savedPets')
+            .where(
+                {
+                    userId: userId,
+                    petId: petId
+                }
+            );
+        if (id) {
+            query.andWhere('id', '!=', id);
+        }
+        const user = await query.first();
+        return user;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     readAllSavedPetsModel,
     readSavedPetModel,
@@ -90,5 +115,6 @@ module.exports = {
     editSavedPetModel,
     doesSavedPetExistModel,
     readUserSavedPetsModel,
-    deleteSavedPetModel
+    deleteSavedPetModel,
+    isNewSavedPetModel
 };

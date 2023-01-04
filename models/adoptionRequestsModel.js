@@ -5,9 +5,7 @@ async function readAllAdoptionRequestsModel() {
         const adoptionRequestsList = await dbConnection.from('adoptionRequests')
             .join('users', 'users.id', '=', 'adoptionRequests.userId')
             .join('pets', 'pets.id', '=', 'adoptionRequests.petId')
-            .select('adoptionRequests.id as id', 'users.name as userName',
-                'pets.petName as petName', 'adoptionRequests.personalComentary',
-                'adoptionRequests.dateCreated')
+            .select('adoptionRequests.*', 'users.userName', 'pets.petName')
         return adoptionRequestsList
     } catch (err) {
         console.log(err);
@@ -19,8 +17,8 @@ async function readAdoptionRequestModel(adoptionRequestId) {
         const adoptionRequest = await dbConnection.from('adoptionRequests')
             .join('users', 'users.id', '=', 'adoptionRequests.userId')
             .join('pets', 'pets.id', '=', 'adoptionRequests.petId')
+            .select('adoptionRequests.*', 'users.userName', 'pets.petName')
             .where({ 'adoptionRequests.id': adoptionRequestId })
-            .select('adoptionRequests.id as id', 'users.name as userName', 'pets.petName as petName', 'adoptionRequests.personalComentary', 'adoptionRequests.dateCreated')
             .first()
         return adoptionRequest
     } catch (err) {
@@ -42,7 +40,10 @@ async function readUserAdoptionRequestsModel(userId) {
 
 async function addAdoptionRequestModel(newAdoptionRequest) {
     try {
-        const [newRegister] = await dbConnection.from('adoptionRequests').insert(newAdoptionRequest).returning('*')
+        const [id] = await dbConnection('adoptionRequests')
+            .insert(newAdoptionRequest)
+        const newRegister = await readAdoptionRequestModel(id)
+
         return newRegister
     } catch (err) {
         console.log(err);
@@ -51,16 +52,21 @@ async function addAdoptionRequestModel(newAdoptionRequest) {
 
 async function editAdoptionRequestModel(adoptionRequestId, updatedAdoptionRequest) {
     try {
-        const [updated] = await dbConnection.from('adoptionRequests').where({ id: adoptionRequestId }).update(updatedAdoptionRequest).returning('*')
-        return updated
+        const updated = await dbConnection.from('adoptionRequests')
+            .where({ id: adoptionRequestId })
+            .update(updatedAdoptionRequest)
+
+        const updatedRegister = await readAdoptionRequestModel(adoptionRequestId)
+        return updatedRegister
+
     } catch (err) {
         console.log(err);
     }
 }
 
-async function deleteAdoptionRequestModel(savedPetId) {
+async function deleteAdoptionRequestModel(adoptionRequestId) {
     try {
-        const deleted = await dbConnection.from('savedPets').where({ id: savedPetId }).del()
+        const deleted = await dbConnection.from('adoptionRequests').where({ id: adoptionRequestId }).del()
         return deleted
     } catch (err) {
         console.log(err);
@@ -69,15 +75,34 @@ async function deleteAdoptionRequestModel(savedPetId) {
 
 async function doesAdoptionRequestExistModel(userId, petId) {
     try {
-        const savedPet = await dbConnection.from('savedPets').where({
+        const adoptionRequest = await dbConnection.from('adoptionRequests').where({
             userId: userId,
             petId: petId
         }).first()
-        if (savedPet) {
+        if (adoptionRequest) {
             return true
         } else {
             return false
         }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function isNewAdoptionRequestModel(userId, petId, id) {
+    try {
+        const query = dbConnection.from('adoptionRequests')
+            .where(
+                {
+                    userId: userId,
+                    petId: petId
+                }
+            );
+        if (id) {
+            query.andWhere('id', '!=', id);
+        }
+        const user = await query.first();
+        return user;
     } catch (err) {
         console.log(err);
     }
@@ -90,5 +115,6 @@ module.exports = {
     editAdoptionRequestModel,
     doesAdoptionRequestExistModel,
     readUserAdoptionRequestsModel,
-    deleteAdoptionRequestModel
+    deleteAdoptionRequestModel,
+    isNewAdoptionRequestModel
 };

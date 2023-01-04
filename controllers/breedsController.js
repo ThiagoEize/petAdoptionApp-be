@@ -51,8 +51,11 @@ const editBreed = async (req, res) => {
     try {
         const updatedBreed = req.body;
         const updated = await BreedsModel.editBreedModel(req.params.breedId, updatedBreed);
-        console.log('updateBreedController', updated)
-        res.send(updated);
+
+        res.send({
+            success: true,
+            data: updated
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

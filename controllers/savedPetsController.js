@@ -1,29 +1,29 @@
-const adoptionRequestsModel = require('../models/adoptionRequestsModel');
+const savedPetsModel = require('../models/savedPetsModel');
 
-async function readAllAdoptionRequests(req, res) {
+async function getSavedPets(req, res) {
     try {
-        const adoptionRequests = await adoptionRequestsModel.readAllAdoptionRequestsModel();
-        res.send(adoptionRequests);
+        const savedPets = await savedPetsModel.readAllSavedPetsModel();
+        res.send(savedPets);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 }
 
-async function readSavedPet(req, res) {
+async function getSavedPet(req, res) {
     try {
-        const adoptionRequest = await adoptionRequestsModel.readSavedPetModel(req.params.id);
-        res.send(adoptionRequest);
+        const savedPet = await savedPetsModel.readSavedPetModel(req.params.savedPetId);
+        res.send(savedPet);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 }
 
-async function readUserAdoptionRequests(req, res) {
+async function getUserSavedPets(req, res) {
     try {
-        const userAdoptionRequests = await adoptionRequestsModel.readUserAdoptionRequestsModel(req.params.userId);
-        res.send(userAdoptionRequests);
+        const userSavedPets = await savedPetsModel.readUserSavedPetsModel(req.params.userId);
+        res.send(userSavedPets);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
@@ -32,9 +32,9 @@ async function readUserAdoptionRequests(req, res) {
 
 async function addSavedPet(req, res) {
     try {
-        const newAdoptionRequest = req.body;
-        const savedAdoptionRequest = await adoptionRequestsModel.addSavedPetModel(newAdoptionRequest);
-        res.send(savedAdoptionRequest);
+        const newSavedPet = req.body;
+        const savedSavedPet = await savedPetsModel.addSavedPetModel(newSavedPet);
+        res.send(savedSavedPet);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
@@ -43,8 +43,8 @@ async function addSavedPet(req, res) {
 
 async function editSavedPet(req, res) {
     try {
-        const updatedAdoptionRequest = req.body;
-        const updated = await adoptionRequestsModel.editSavedPetModel(req.params.id, updatedAdoptionRequest);
+        const updatedSavedPet = req.body;
+        const updated = await savedPetsModel.editSavedPetModel(req.params.savedPetId, updatedSavedPet);
         res.send(updated);
     } catch (err) {
         console.log(err);
@@ -54,10 +54,22 @@ async function editSavedPet(req, res) {
 
 async function deleteSavedPet(req, res) {
     try {
-        const deleted = await adoptionRequestsModel.deleteSavedPetModel(req.params.id);
-        res.send(deleted);
+        const deleted = await savedPetsModel.deleteSavedPetModel(req.params.savedPetId);
+        res.send({
+            success: true,
+            data: deleted
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
     }
 }
+
+module.exports = {
+    getSavedPets,
+    getSavedPet,
+    getUserSavedPets,
+    addSavedPet,
+    editSavedPet,
+    deleteSavedPet
+};

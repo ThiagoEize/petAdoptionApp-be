@@ -3,8 +3,8 @@ const SpeciesModel = require('../models/speciesModel');
 async function getSpecies(req, res) {
     try {
         const query = req.query;
-
         const species = await SpeciesModel.readAllSpeciesModel(query);
+
         res.send({
             success: true,
             data: species

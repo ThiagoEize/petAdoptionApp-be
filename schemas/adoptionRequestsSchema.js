@@ -1,4 +1,4 @@
-const dietaryRestrictionsSchema = {
+const adoptionRequestsSchema = {
     type: "object",
     properties: {
         id: { type: "integer" },
@@ -7,10 +7,10 @@ const dietaryRestrictionsSchema = {
         adoptionRequestMessage: { type: "string" },
         requestStatus: { type: "string" },
 
-        dateCreated: { type: "string", format: "date-time" }
+        dateCreated: { type: "string" }
     },
     required: ["userId", "petId", "requestStatus"],
     additionalProperties: false
 };
 
-module.exports = { dietaryRestrictionsSchema };
+module.exports = { adoptionRequestsSchema };

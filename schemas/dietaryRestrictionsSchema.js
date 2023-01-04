@@ -3,10 +3,11 @@ const dietaryRestrictionsSchema = {
     properties: {
         id: { type: "integer" },
         petId: { type: "integer" },
-        adoptionRequestMessage: { type: "string" },
-        dateCreated: { type: "string", format: "date-time" }
+        foodName: { type: "string" },
+        description: { type: "string" },
+        dateCreated: { type: "string" }
     },
-    required: ["petId"],
+    required: ["petId", "foodName"],
     additionalProperties: false
 };
 

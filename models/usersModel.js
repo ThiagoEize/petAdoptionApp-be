@@ -71,7 +71,6 @@ async function editUserModel(userId, updatedUser) {
             .where({ id: userId })
             .update(updatedUser)
 
-
         const updatedRegister = await readUserModel(userId)
         return updatedRegister
 
