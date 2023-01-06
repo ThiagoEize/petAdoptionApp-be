@@ -14,6 +14,7 @@ router.post('/',
     SpeciesController.addSpecie);
 router.put('/:specieId',
     GlobalMiddleware.validateBody(speciesSchema),
+    Middleware.isValidId,
     Middleware.isNewSpecie,
     SpeciesController.editSpecie);
 router.delete('/:specieId', SpeciesController.deleteSpecie);

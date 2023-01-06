@@ -2,6 +2,16 @@ const Ajv = require('ajv');
 const ajv = new Ajv();
 const SpeciesModel = require('../models/speciesModel');
 
+const isValidId = async (req, res, next) => {
+    const { specieId } = req.params;
+    const specie = await SpeciesModel.readSpecieModel(specieId);
+    if (!specie) {
+        res.status(400).send('There is no existing specie selected');
+        return;
+    }
+    next();
+}
+
 const isNewSpecie = async (req, res, next) => {
     const { specieId } = req.params;
     const { specieName } = req.body;
@@ -13,4 +23,4 @@ const isNewSpecie = async (req, res, next) => {
     next();
 };
 
-module.exports = { isNewSpecie };
+module.exports = { isNewSpecie, isValidId };

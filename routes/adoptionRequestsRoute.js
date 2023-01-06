@@ -14,6 +14,7 @@ router.post('/',
     AdoptionRequestsController.addAdoptionRequest);
 router.put('/:adoptionRequestId',
     GlobalMiddleware.validateBody(adoptionRequestsSchema),
+    Middleware.isValidId,
     Middleware.isNewAdoptionRequest,
     AdoptionRequestsController.editAdoptionRequest);
 router.delete('/:adoptionRequestId', AdoptionRequestsController.deleteAdoptionRequest);

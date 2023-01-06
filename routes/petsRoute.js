@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get('/', PetsController.getPets);
 
-router.get('/user/:userId', PetsController.getUserPets);
+router.get('/:userId', PetsController.getUserPets);
 
 router.get('/:petId', PetsController.getPet);
 
@@ -22,6 +22,7 @@ router.post('/',
 
 router.put('/:petId',
     GlobalMiddleware.validateBody(petsSchema),
+    Middleware.isValidId,
     Middleware.isNewPet,
     PetsController.editPet
 );

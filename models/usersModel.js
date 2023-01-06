@@ -118,6 +118,7 @@ async function isNewUserModel(email, id) {
     } catch (err) {
         console.log(err);
     }
+
 }
 
 module.exports = {

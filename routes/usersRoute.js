@@ -20,6 +20,7 @@ router.post('/',
 
 router.put('/:userId',
     GlobalMiddleware.validateBody(usersSchema),
+    Middleware.isValidId,
     Middleware.isNewUser,
     UsersController.editUser
 );

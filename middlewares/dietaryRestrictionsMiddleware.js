@@ -2,6 +2,16 @@ const Ajv = require('ajv');
 const ajv = new Ajv();
 const DietaryRestrictionsModel = require('../models/dietaryRestrictionsModel');
 
+const isValidId = async (req, res, next) => {
+    const { dietaryRestrictionId } = req.params;
+    const dietaryRestriction = await DietaryRestrictionsModel.readDietaryRestrictionModel(dietaryRestrictionId);
+    if (!dietaryRestriction) {
+        res.status(400).send('There is no existing dietary restriction selected');
+        return;
+    }
+    next();
+}
+
 const isNewDietaryRestriction = async (req, res, next) => {
     const { dietaryRestrictionId } = req.params;
     const { petId, foodName } = req.body;
@@ -14,4 +24,4 @@ const isNewDietaryRestriction = async (req, res, next) => {
     next();
 };
 
-module.exports = { isNewDietaryRestriction };
+module.exports = { isNewDietaryRestriction, isValidId };

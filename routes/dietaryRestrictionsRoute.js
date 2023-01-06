@@ -22,6 +22,7 @@ router.post('/',
 
 router.put('/:dietaryRestrictionId',
     GlobalMiddleware.validateBody(dietaryRestrictionsSchema),
+    Middleware.isValidId,
     Middleware.isNewDietaryRestriction,
     DietaryRestrictionsController.editDietaryRestriction
 );

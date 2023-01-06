@@ -14,6 +14,7 @@ router.post('/',
     SavedPetsController.addSavedPet);
 router.put('/:savedPetId',
     GlobalMiddleware.validateBody(savedPetsSchema),
+    Middleware.isValidId,
     Middleware.isNewSavedPet,
     SavedPetsController.editSavedPet);
 router.delete('/:savedPetId', SavedPetsController.deleteSavedPet);

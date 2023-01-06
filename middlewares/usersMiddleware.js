@@ -15,6 +15,17 @@ function checkIfUserExists(req, res, next) {
     next();
 }
 
+const isValidId = async (req, res, next) => {
+    const { userId } = req.params;
+    const user = await UsersModel.readUserModel(userId);
+    console.log(user);
+    if (!user) {
+        res.status(400).send('There is existing user with selected');
+        return;
+    }
+    next();
+}
+
 const isNewUser = async (req, res, next) => {
     const { userId } = req.params;
     const { email } = req.body;
@@ -26,4 +37,4 @@ const isNewUser = async (req, res, next) => {
     next();
 };
 
-module.exports = { checkIfUserExists, isNewUser };
+module.exports = { checkIfUserExists, isValidId, isNewUser };

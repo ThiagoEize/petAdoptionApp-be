@@ -22,6 +22,7 @@ router.post('/',
 
 router.put('/:breedId',
     GlobalMiddleware.validateBody(breedsSchema),
+    Middleware.isValidId,
     Middleware.isNewBreed,
     BreedsController.editBreed
 );

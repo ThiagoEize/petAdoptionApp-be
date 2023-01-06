@@ -2,6 +2,16 @@ const Ajv = require('ajv');
 const ajv = new Ajv();
 const SavedPetsModel = require('../models/savedPetsModel');
 
+const isValidId = async (req, res, next) => {
+    const { savedPetId } = req.params;
+    const savedPet = await SavedPetsModel.readSavedPetModel(savedPetId);
+    if (!savedPet) {
+        res.status(400).send('There is no existing saved pet selected');
+        return;
+    }
+    next();
+}
+
 const isNewSavedPet = async (req, res, next) => {
     const { savedPetId } = req.params;
     const { userId, petId } = req.body;
@@ -13,4 +23,4 @@ const isNewSavedPet = async (req, res, next) => {
     next();
 };
 
-module.exports = { isNewSavedPet };
+module.exports = { isNewSavedPet, isValidId };

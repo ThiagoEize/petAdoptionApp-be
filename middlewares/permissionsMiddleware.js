@@ -2,6 +2,16 @@ const Ajv = require('ajv');
 const ajv = new Ajv();
 const PermissionsModel = require('../models/permissionsModel');
 
+const isValidId = async (req, res, next) => {
+    const { permissionId } = req.params;
+    const permission = await PermissionsModel.readPermissionModel(permissionId);
+    if (!permission) {
+        res.status(400).send('There is no existing permission selected');
+        return;
+    }
+    next();
+}
+
 const isNewPermission = async (req, res, next) => {
     const { permissionId } = req.params;
     const { permissionName } = req.body;
@@ -13,4 +23,4 @@ const isNewPermission = async (req, res, next) => {
     next();
 };
 
-module.exports = { isNewPermission };
+module.exports = { isNewPermission, isValidId };

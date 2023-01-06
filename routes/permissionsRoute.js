@@ -21,6 +21,7 @@ router.post('/',
 
 router.put('/:permissionId',
     GlobalMiddleware.validateBody(permissionsSchema),
+    Middleware.isValidId,
     Middleware.isNewPermission,
     PermissionsController.editPermission
 );
