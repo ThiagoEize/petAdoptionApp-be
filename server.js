@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 // const morgan = require('morgan');
 require('dotenv').config();
+const cors = require('cors');
 
 // const usersRoutes = require('./routes/usersRoutes')
 const permissionsRoute = require('./routes/permissionsRoute')
@@ -18,6 +19,7 @@ const PORT = process.env.PORT || 8080;
 const dbConnection = require('./knex/knex');
 
 app.use(express.json());
+app.use(cors());
 
 app.use('/permissions', permissionsRoute);
 app.use('/users', usersRoute);

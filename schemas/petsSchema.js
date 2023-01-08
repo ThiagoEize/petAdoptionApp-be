@@ -2,7 +2,10 @@ const petsSchema = {
     type: "object",
     properties: {
         id: { type: "integer" },
-        userId: { type: "integer" },
+        userId: {
+            type: "integer",
+            nullable: true
+        },
         breedId: { type: "integer" },
         petName: { type: "string", minLength: 3, maxLength: 18 },
         adoptionStatus: {

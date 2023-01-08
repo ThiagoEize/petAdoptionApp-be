@@ -12,9 +12,10 @@ router.get('/', UsersController.getUsers);
 
 router.get('/:userId', UsersController.getUser);
 
-router.post('/',
+router.post('/signup',
     GlobalMiddleware.validateBody(usersSchema),
     Middleware.isNewUser,
+    Middleware.passwordsMatch,
     UsersController.addUser
 );
 

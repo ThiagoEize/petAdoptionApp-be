@@ -1,9 +1,13 @@
 const usersSchema = {
     type: "object",
     properties: {
-        permissionId: { type: "integer" },
+        permissionId: {
+            type: "integer",
+            nullable: true
+        },
         email: { type: "string" },
         password: { type: "string" },
+        repassword: { type: "string" },
         userName: { type: "string" },
         userLastName: { type: "string" },
         phoneNumber: { type: "string" },
