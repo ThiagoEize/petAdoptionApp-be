@@ -17,6 +17,7 @@ router.get('/:petId', PetsController.getPet);
 router.post('/',
     GlobalMiddleware.validateBody(petsSchema),
     Middleware.isNewPet,
+    Middleware.upload.single('picture'),
     PetsController.addPet
 );
 

@@ -43,7 +43,8 @@ async function getUserPets(req, res) {
 
 async function addPet(req, res) {
     try {
-        const newPet = req.body;
+        console.log(req.file.path);
+        const newPet = { ...req.body, picture: req.file.path };
         const savedPet = await PetsModel.addPetModel(newPet);
         res.send({
             success: true,
