@@ -1,6 +1,7 @@
 const Ajv = require('ajv');
 const ajv = new Ajv();
 const UsersModel = require('../models/usersModel');
+const PermissionsModel = require('../models/permissionsModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -31,8 +32,6 @@ function hashPwd(req, res, next) {
     });
 }
 
-
-
 const isValidId = async (req, res, next) => {
     const { userId } = req.params;
     const user = await UsersModel.readUserModel(userId);
@@ -59,7 +58,7 @@ const checkIfUserExists = async (req, res, next) => {
     try {
         const { email } = req.body;
         const user = await UsersModel.doesUserExistModel(email);
-        // console.log(req.body);
+        console.log(req.body);
         if (!user) {
             res.status(400).send('User with this email does not exist');
             return;
@@ -80,7 +79,6 @@ async function verifyPassword(req, res, next) {
                 req.body.token = token;
                 // console.log(token);
                 next();
-
             } else {
                 res.status(400).send("Incorrect Password");
             }
@@ -95,7 +93,42 @@ async function verifyPassword(req, res, next) {
     // } catch (err) {
     //     res.status(500).send(err);
     // }
-
 }
 
-module.exports = { passwordsMatch, hashPwd, checkIfUserExists, isValidId, isNewUser, verifyPassword };
+async function givingUserPermission(req, res, next) {
+    try {
+        // Check if a permission called 'user' exists
+        const userPermission = await PermissionsModel.readAllPermissionsModel({ permissionName: 'user' });
+        console.log('test userPermission', userPermission);
+        if (userPermission.length > 0) {
+            req.body.permissionId = userPermission[0].id;
+            console.log('signin login:', req.body);
+            next();
+        } else {
+            const newPermission = {
+                permissionName: 'user',
+                canEditCreateAdmins: false,
+                canEditUsersPermissions: false,
+                canAcceptAdoptionRequests: false,
+                canAdoptFosterPets: true,
+                canAdoptPets: true
+            };
+
+            const createdPermission = await PermissionsModel.addPermissionModel(newPermission);
+            req.body.permissionId = createdPermission.id;
+            console.log('signin login:', req.body);
+            next();
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+module.exports = {
+    passwordsMatch,
+    hashPwd,
+    checkIfUserExists,
+    isValidId,
+    isNewUser,
+    verifyPassword,
+    givingUserPermission
+};

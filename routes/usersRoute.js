@@ -23,6 +23,7 @@ router.post('/signup',
     Middleware.isNewUser,
     Middleware.passwordsMatch,
     Middleware.hashPwd,
+    Middleware.givingUserPermission,
     UsersController.signup
 );
 

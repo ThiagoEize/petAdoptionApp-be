@@ -13,8 +13,8 @@ const petsRoute = require('./routes/petsRoute')
 const savedPetsRoute = require('./routes/savedPetsRoute')
 const adoptionRequestsRoute = require('./routes/adoptionRequestsRoute')
 const dietaryRestrictionsRoute = require('./routes/dietaryRestrictionsRoute')
-const cookieParser = require('cookie-parser');
-app.use(cookieParser());
+// const cookieParser = require('cookie-parser');
+// app.use(cookieParser());
 
 const PORT = process.env.PORT || 8080;
 

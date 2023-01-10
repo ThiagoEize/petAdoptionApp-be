@@ -40,6 +40,23 @@ async function readPermissionModel(permissionId) {
     }
 }
 
+async function readUserPermissionModel(userId) {
+    try {
+        const permission = await dbConnection
+            .from('users')
+            .leftJoin('permissions', 'users.permissionId', '=', 'permissions.id')
+            .where({ 'users.id': userId })
+            .select(
+                'permissions.*',
+                'users.id as userId'
+            )
+            .first()
+        return permission
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 async function addPermissionModel(newPermission) {
     try {
         const [id] = await dbConnection('permissions')
@@ -107,6 +124,7 @@ async function isNewPermissionModel(permissionName, id) {
 module.exports = {
     readAllPermissionsModel,
     readPermissionModel,
+    readUserPermissionModel,
     addPermissionModel,
     editPermissionModel,
     deletePermissionModel,

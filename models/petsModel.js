@@ -20,6 +20,12 @@ async function readAllPetsModel(query) {
             .leftJoin('breeds', 'breeds.id', '=', 'pets.breedId')
             .leftJoin('species', 'species.id', '=', 'breeds.specieId')
             .leftJoin('users', 'users.id', '=', 'pets.userId')
+            .select(
+                'pets.*',
+                'users.userName',
+                'species.specieName',
+                'breeds.breedName',
+            )
         for (let [key, value] of Object.entries(query)) {
             if (value[0] === '%') {
                 const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);

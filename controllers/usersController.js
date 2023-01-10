@@ -74,6 +74,7 @@ async function deleteUser(req, res) {
 
 const signup = async (req, res) => {
     try {
+        console.log('controller signin:', req.body);
         const user = await UsersModel.addUserModel(req.body);
         res.send({ id: user.id, ok: true });
     } catch (err) {

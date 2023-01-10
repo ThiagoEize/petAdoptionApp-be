@@ -11,12 +11,14 @@ router.get('/:specieId', SpeciesController.getSpecie);
 router.post('/',
     GlobalMiddleware.validateBody(speciesSchema),
     GlobalMiddleware.auth,
+    Middleware.canAcess,
     Middleware.isNewSpecie,
     SpeciesController.addSpecie
 );
 router.put('/:specieId',
-    GlobalMiddleware.auth,
     GlobalMiddleware.validateBody(speciesSchema),
+    GlobalMiddleware.auth,
+    Middleware.canAcess,
     Middleware.isValidId,
     Middleware.isNewSpecie,
     SpeciesController.editSpecie

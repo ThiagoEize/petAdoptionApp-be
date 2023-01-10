@@ -5,6 +5,7 @@ const { permissionsSchema } = require('../schemas/permissionsSchema');
 const GlobalMiddleware = require('../middlewares/globalMiddleware');
 const Middleware = require('../middlewares/permissionsMiddleware');
 
+
 const router = express.Router();
 
 ///Add Validation Middleware to POST/PUT routes

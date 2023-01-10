@@ -2,6 +2,11 @@ const Ajv = require('ajv');
 const ajv = new Ajv();
 const SpeciesModel = require('../models/speciesModel');
 
+const canAcess = async (req, res, next) => {
+    console.log('canAcess', req.userId);
+    next();
+}
+
 const isValidId = async (req, res, next) => {
     const { specieId } = req.params;
     const specie = await SpeciesModel.readSpecieModel(specieId);
@@ -23,4 +28,4 @@ const isNewSpecie = async (req, res, next) => {
     next();
 };
 
-module.exports = { isNewSpecie, isValidId };
+module.exports = { canAcess, isNewSpecie, isValidId };
