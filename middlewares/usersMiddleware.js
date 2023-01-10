@@ -1,6 +1,11 @@
 const Ajv = require('ajv');
 const ajv = new Ajv();
 const UsersModel = require('../models/usersModel');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+// const cookieParser = require('cookie-parser');
+// app.use(cookieParser());
 
 function passwordsMatch(req, res, next) {
     if (req.body.password !== req.body.repassword) {
@@ -21,27 +26,17 @@ function hashPwd(req, res, next) {
             return;
         }
         req.body.password = hash;
+        // console.log(hash);
         next();
     });
 }
 
 
-function checkIfUserExists(req, res, next) {
-    const { email } = req.body;
-    const user = UsersModel.doesUserExistModel(email);
-
-    if (!user) {
-        res.status(400).send('User with this email does not exist');
-        return;
-    }
-
-    next();
-}
 
 const isValidId = async (req, res, next) => {
     const { userId } = req.params;
     const user = await UsersModel.readUserModel(userId);
-    console.log(user);
+    // console.log(user);
     if (!user) {
         res.status(400).send('There is existing user with selected');
         return;
@@ -60,4 +55,47 @@ const isNewUser = async (req, res, next) => {
     next();
 };
 
-module.exports = { passwordsMatch, hashPwd, checkIfUserExists, isValidId, isNewUser };
+const checkIfUserExists = async (req, res, next) => {
+    try {
+        const { email } = req.body;
+        const user = await UsersModel.doesUserExistModel(email);
+        // console.log(req.body);
+        if (!user) {
+            res.status(400).send('User with this email does not exist');
+            return;
+        }
+        req.body.user = user;
+        next();
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function verifyPassword(req, res, next) {
+    try {
+        const { user, password } = req.body;
+        bcrypt.compare(password, user.password, (err, result) => {
+            if (result) {
+                const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, { expiresIn: "12h" });
+                req.body.token = token;
+                // console.log(token);
+                next();
+
+            } else {
+                res.status(400).send("Incorrect Password");
+            }
+        });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+    // try {
+    //     const { user, token } = req.body;
+    //     res.cookie('token', token, { maxAge: 86000000, httpOnly: true });
+    //     res.send({ name: user.name, id: user.id, });
+    // } catch (err) {
+    //     res.status(500).send(err);
+    // }
+
+}
+
+module.exports = { passwordsMatch, hashPwd, checkIfUserExists, isValidId, isNewUser, verifyPassword };

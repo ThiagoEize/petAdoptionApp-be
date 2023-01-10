@@ -3,6 +3,7 @@ const UsersController = require('../controllers/usersController');
 const Middleware = require('../middlewares/usersMiddleware');
 const GlobalMiddleware = require('../middlewares/globalMiddleware');
 const { usersSchema } = require('../schemas/usersSchema');
+const { userLoginsSchema } = require('../schemas/userLoginsSchema');
 
 const router = express.Router();
 
@@ -10,13 +11,19 @@ const router = express.Router();
 
 router.get('/', UsersController.getUsers);
 
-router.get('/:userId', UsersController.getUser);
+router.post('/login',
+    GlobalMiddleware.validateBody(userLoginsSchema),
+    Middleware.checkIfUserExists,
+    Middleware.verifyPassword,
+    UsersController.login
+);
 
 router.post('/signup',
     GlobalMiddleware.validateBody(usersSchema),
     Middleware.isNewUser,
     Middleware.passwordsMatch,
-    UsersController.addUser
+    Middleware.hashPwd,
+    UsersController.signup
 );
 
 router.put('/:userId',
@@ -26,6 +33,6 @@ router.put('/:userId',
     UsersController.editUser
 );
 
-router.delete('/:userId', UsersController.deleteUser);
+router.delete('user/:userId', UsersController.deleteUser);
 
 module.exports = router;

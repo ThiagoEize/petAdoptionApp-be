@@ -10,13 +10,17 @@ router.get('/', SpeciesController.getSpecies);
 router.get('/:specieId', SpeciesController.getSpecie);
 router.post('/',
     GlobalMiddleware.validateBody(speciesSchema),
+    GlobalMiddleware.auth,
     Middleware.isNewSpecie,
-    SpeciesController.addSpecie);
+    SpeciesController.addSpecie
+);
 router.put('/:specieId',
+    GlobalMiddleware.auth,
     GlobalMiddleware.validateBody(speciesSchema),
     Middleware.isValidId,
     Middleware.isNewSpecie,
-    SpeciesController.editSpecie);
+    SpeciesController.editSpecie
+);
 router.delete('/:specieId', SpeciesController.deleteSpecie);
 
 module.exports = router;

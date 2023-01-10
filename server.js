@@ -13,6 +13,8 @@ const petsRoute = require('./routes/petsRoute')
 const savedPetsRoute = require('./routes/savedPetsRoute')
 const adoptionRequestsRoute = require('./routes/adoptionRequestsRoute')
 const dietaryRestrictionsRoute = require('./routes/dietaryRestrictionsRoute')
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
 const PORT = process.env.PORT || 8080;
 
@@ -20,6 +22,7 @@ const dbConnection = require('./knex/knex');
 
 app.use(express.json());
 app.use(cors());
+// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 app.use('/permissions', permissionsRoute);
 app.use('/users', usersRoute);
