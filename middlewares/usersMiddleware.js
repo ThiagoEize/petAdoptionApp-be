@@ -77,6 +77,7 @@ async function verifyPassword(req, res, next) {
             if (result) {
                 const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, { expiresIn: "12h" });
                 req.body.token = token;
+                console.log('vfp token', token);
                 // console.log(token);
                 next();
             } else {

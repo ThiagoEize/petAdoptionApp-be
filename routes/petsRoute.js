@@ -8,14 +8,22 @@ const router = express.Router();
 
 ///Add Validation Middleware to POST/PUT routes
 
-router.get('/', PetsController.getPets);
+router.get('/',
+    GlobalMiddleware.auth,
+    PetsController.getPets);
 
-router.get('/:userId', PetsController.getUserPets);
+router.get('/:userId',
+    GlobalMiddleware.auth,
+    PetsController.getUserPets
+);
 
-router.get('/:petId', PetsController.getPet);
+router.get('/:petId',
+    GlobalMiddleware.auth, PetsController.getPet
+);
 
 router.post('/',
     GlobalMiddleware.validateBody(petsSchema),
+    GlobalMiddleware.auth,
     Middleware.isNewPet,
     Middleware.upload.single('picture'),
     PetsController.addPet
@@ -23,11 +31,15 @@ router.post('/',
 
 router.put('/:petId',
     GlobalMiddleware.validateBody(petsSchema),
+    GlobalMiddleware.auth,
     Middleware.isValidId,
     Middleware.isNewPet,
     PetsController.editPet
 );
 
-router.delete('/:petId', PetsController.deletePet);
+router.delete('/:petId',
+    GlobalMiddleware.auth,
+    PetsController.deletePet
+);
 
 module.exports = router;

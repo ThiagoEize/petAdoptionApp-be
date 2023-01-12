@@ -6,8 +6,8 @@ const { speciesSchema } = require('../schemas/speciesSchema');
 
 const router = express.Router();
 
-router.get('/', SpeciesController.getSpecies);
-router.get('/:specieId', SpeciesController.getSpecie);
+router.get('/', GlobalMiddleware.auth, SpeciesController.getSpecies);
+router.get('/:specieId', GlobalMiddleware.auth, SpeciesController.getSpecie);
 router.post('/',
     GlobalMiddleware.validateBody(speciesSchema),
     GlobalMiddleware.auth,
