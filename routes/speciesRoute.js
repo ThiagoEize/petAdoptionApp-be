@@ -6,8 +6,14 @@ const { speciesSchema } = require('../schemas/speciesSchema');
 
 const router = express.Router();
 
-router.get('/', GlobalMiddleware.auth, SpeciesController.getSpecies);
-router.get('/:specieId', GlobalMiddleware.auth, SpeciesController.getSpecie);
+router.get('/',
+    GlobalMiddleware.auth,
+    SpeciesController.getSpecies
+);
+router.get('/:specieId',
+    GlobalMiddleware.auth,
+    SpeciesController.getSpecie
+);
 router.post('/',
     GlobalMiddleware.validateBody(speciesSchema),
     GlobalMiddleware.auth,
@@ -23,6 +29,9 @@ router.put('/:specieId',
     Middleware.isNewSpecie,
     SpeciesController.editSpecie
 );
-router.delete('/:specieId', SpeciesController.deleteSpecie);
+router.delete('/:specieId',
+    GlobalMiddleware.auth,
+    SpeciesController.deleteSpecie
+);
 
 module.exports = router;

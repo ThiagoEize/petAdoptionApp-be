@@ -6,17 +6,28 @@ const { savedPetsSchema } = require('../schemas/savedPetsSchema');
 
 const router = express.Router();
 
-router.get('/', SavedPetsController.getSavedPets);
-router.get('/:savedPetId', SavedPetsController.getSavedPet);
+router.get('/',
+    GlobalMiddleware.auth,
+    SavedPetsController.getSavedPets
+);
+router.get('/:savedPetId',
+    GlobalMiddleware.auth,
+    SavedPetsController.getSavedPet
+);
 router.post('/',
     GlobalMiddleware.validateBody(savedPetsSchema),
+    GlobalMiddleware.auth,
     Middleware.isNewSavedPet,
     SavedPetsController.addSavedPet);
 router.put('/:savedPetId',
     GlobalMiddleware.validateBody(savedPetsSchema),
+    GlobalMiddleware.auth,
     Middleware.isValidId,
     Middleware.isNewSavedPet,
     SavedPetsController.editSavedPet);
-router.delete('/:savedPetId', SavedPetsController.deleteSavedPet);
+router.delete('/:savedPetId',
+    GlobalMiddleware.auth,
+    SavedPetsController.deleteSavedPet
+);
 
 module.exports = router;

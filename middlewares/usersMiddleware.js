@@ -58,7 +58,7 @@ const checkIfUserExists = async (req, res, next) => {
     try {
         const { email } = req.body;
         const user = await UsersModel.doesUserExistModel(email);
-        console.log(req.body);
+
         if (!user) {
             res.status(400).send('User with this email does not exist');
             return;
@@ -77,8 +77,6 @@ async function verifyPassword(req, res, next) {
             if (result) {
                 const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, { expiresIn: "12h" });
                 req.body.token = token;
-                console.log('vfp token', token);
-                // console.log(token);
                 next();
             } else {
                 res.status(400).send("Incorrect Password");
@@ -100,10 +98,8 @@ async function givingUserPermission(req, res, next) {
     try {
         // Check if a permission called 'user' exists
         const userPermission = await PermissionsModel.readAllPermissionsModel({ permissionName: 'user' });
-        console.log('test userPermission', userPermission);
         if (userPermission.length > 0) {
             req.body.permissionId = userPermission[0].id;
-            console.log('signin login:', req.body);
             next();
         } else {
             const newPermission = {

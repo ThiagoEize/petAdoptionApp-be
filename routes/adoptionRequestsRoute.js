@@ -6,17 +6,28 @@ const { adoptionRequestsSchema } = require('../schemas/adoptionRequestsSchema');
 
 const router = express.Router();
 
-router.get('/', AdoptionRequestsController.getAdoptionRequests);
-router.get('/:adoptionRequestId', AdoptionRequestsController.getAdoptionRequest);
+router.get('/',
+    GlobalMiddleware.auth,
+    AdoptionRequestsController.getAdoptionRequests
+);
+router.get('/:adoptionRequestId',
+    GlobalMiddleware.auth,
+    AdoptionRequestsController.getAdoptionRequest
+);
 router.post('/',
     GlobalMiddleware.validateBody(adoptionRequestsSchema),
+    GlobalMiddleware.auth,
     Middleware.isNewAdoptionRequest,
     AdoptionRequestsController.addAdoptionRequest);
 router.put('/:adoptionRequestId',
     GlobalMiddleware.validateBody(adoptionRequestsSchema),
+    GlobalMiddleware.auth,
     Middleware.isValidId,
     Middleware.isNewAdoptionRequest,
     AdoptionRequestsController.editAdoptionRequest);
-router.delete('/:adoptionRequestId', AdoptionRequestsController.deleteAdoptionRequest);
+router.delete('/:adoptionRequestId',
+    GlobalMiddleware.auth,
+    AdoptionRequestsController.deleteAdoptionRequest
+);
 
 module.exports = router;

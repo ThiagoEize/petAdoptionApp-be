@@ -94,7 +94,7 @@ const login = async (req, res) => {
     //             res.status(400).send("Password don't match");
     //         } else {
     //             const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
-    //             console.log('TOKEN', token);
+    //            
     //             res.send({ token: token, userName: user.userName });
     //         }
     //     });
@@ -103,7 +103,6 @@ const login = async (req, res) => {
     // }
     try {
         const { user, token } = req.body;
-        console.log('loginController', user, token);
         res.send({ id: user.id, token: token });
     } catch (err) {
         res.status(500).send(err);

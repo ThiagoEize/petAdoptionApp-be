@@ -3,7 +3,6 @@ const ajv = new Ajv();
 const SpeciesModel = require('../models/speciesModel');
 
 const canAcess = async (req, res, next) => {
-    console.log('canAcess', req.userId);
     next();
 }
 

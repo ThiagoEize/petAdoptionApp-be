@@ -12,21 +12,29 @@ router.get('/',
     BreedsController.getBreeds,
 );
 
-router.get('/:breedId', BreedsController.getBreed);
+router.get('/:breedId',
+    GlobalMiddleware.auth,
+    BreedsController.getBreed
+);
 
 router.post('/',
     GlobalMiddleware.validateBody(breedsSchema),
+    GlobalMiddleware.auth,
     Middleware.isNewBreed,
     BreedsController.addBreed
 );
 
 router.put('/:breedId',
     GlobalMiddleware.validateBody(breedsSchema),
+    GlobalMiddleware.auth,
     Middleware.isValidId,
     Middleware.isNewBreed,
     BreedsController.editBreed
 );
 
-router.delete('/:breedId', BreedsController.deleteBreed);
+router.delete('/:breedId',
+    GlobalMiddleware.auth,
+    BreedsController.deleteBreed
+);
 
 module.exports = router;

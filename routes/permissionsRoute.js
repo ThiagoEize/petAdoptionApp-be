@@ -10,23 +10,33 @@ const router = express.Router();
 
 ///Add Validation Middleware to POST/PUT routes
 
-router.get('/', PermissionsController.getPermissions);
+router.get('/',
+    GlobalMiddleware.auth,
+    PermissionsController.getPermissions
+);
 
-router.get('/:permissionId', PermissionsController.getPermission);
+router.get('/:permissionId', GlobalMiddleware.auth,
+    PermissionsController.getPermission
+);
 
 router.post('/',
     GlobalMiddleware.validateBody(permissionsSchema),
+    GlobalMiddleware.auth,
     Middleware.isNewPermission,
     PermissionsController.addPermission
 );
 
 router.put('/:permissionId',
     GlobalMiddleware.validateBody(permissionsSchema),
+    GlobalMiddleware.auth,
     Middleware.isValidId,
     Middleware.isNewPermission,
     PermissionsController.editPermission
 );
 
-router.delete('/:permissionId', PermissionsController.deletePermission);
+router.delete('/:permissionId',
+    GlobalMiddleware.auth,
+    PermissionsController.deletePermission
+);
 
 module.exports = router;

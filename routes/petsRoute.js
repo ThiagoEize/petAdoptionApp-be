@@ -22,9 +22,9 @@ router.get('/:petId',
 );
 
 router.post('/',
-    GlobalMiddleware.validateBody(petsSchema),
-    GlobalMiddleware.auth,
-    Middleware.isNewPet,
+    // GlobalMiddleware.validateBody(petsSchema),
+    // GlobalMiddleware.auth,
+    // Middleware.isNewPet,
     Middleware.upload.single('picture'),
     PetsController.addPet
 );

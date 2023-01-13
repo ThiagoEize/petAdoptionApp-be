@@ -43,13 +43,19 @@ async function getUserPets(req, res) {
 
 async function addPet(req, res) {
     try {
-        console.log(req.file.path);
+        console.log('addPet pict', req.file.path);
         const newPet = { ...req.body, picture: req.file.path };
         const savedPet = await PetsModel.addPetModel(newPet);
+        // const savedPet = await PetsModel.addPetModel(req.body);
+        if (!savedPet) {
+            res.status(400).send('Invalid pet');
+            return
+        }
         res.send({
             success: true,
             data: savedPet
         });
+
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
