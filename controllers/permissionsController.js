@@ -29,6 +29,20 @@ async function getPermission(req, res) {
     }
 }
 
+async function getUserPermission(req, res) {
+    try {
+        const userId = req.params.userId;
+        const permission = await PermissionsModel.readUserPermissionModel(userId);
+        res.send({
+            success: true,
+            data: permission
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}
+
 async function addPermission(req, res) {
     try {
         const newPermission = req.body;
@@ -73,6 +87,7 @@ async function deletePermission(req, res) {
 module.exports = {
     getPermissions,
     getPermission,
+    getUserPermission,
     addPermission,
     editPermission,
     deletePermission

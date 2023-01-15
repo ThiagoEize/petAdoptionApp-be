@@ -13,9 +13,9 @@ const petsSchema = {
             enum: ["Adopted", "Fostered", "Available"]
         },
         picture: { type: "string" },
-        petAge: { type: "string" },
-        height: { type: "string" },
-        weight: { type: "string" },
+        petAge: { type: "number" },
+        height: { type: "number" },
+        weight: { type: "number" },
         color: { type: "string" },
         petBio: { type: "string", minLength: 6, maxLength: 1000 },
         dateCreated: { type: "string" }

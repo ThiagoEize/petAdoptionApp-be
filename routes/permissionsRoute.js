@@ -19,6 +19,11 @@ router.get('/:permissionId', GlobalMiddleware.auth,
     PermissionsController.getPermission
 );
 
+router.get('/user/:userId',
+    GlobalMiddleware.auth,
+    PermissionsController.getUserPermission
+);
+
 router.post('/',
     GlobalMiddleware.validateBody(permissionsSchema),
     GlobalMiddleware.auth,

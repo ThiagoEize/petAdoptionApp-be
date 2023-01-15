@@ -43,12 +43,29 @@ async function readPermissionModel(permissionId) {
 async function readUserPermissionModel(userId) {
     try {
         const permission = await dbConnection
+            .from('permissions')
+            .join('users', 'users.permissionId', '=', 'permissions.id')
+            .where({ 'users.id': userId })
+            .select(
+                'permissions.*',
+                'users.userName'
+            )
+            .first()
+        return permission
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function readUserPermissionModel(userId) {
+    try {
+        const permission = await dbConnection
             .from('users')
             .leftJoin('permissions', 'users.permissionId', '=', 'permissions.id')
             .where({ 'users.id': userId })
             .select(
                 'permissions.*',
-                'users.id as userId'
+                'users.id as userId, users.userName'
             )
             .first()
         return permission
