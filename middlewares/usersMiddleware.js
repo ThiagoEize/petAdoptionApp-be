@@ -96,25 +96,42 @@ async function verifyPassword(req, res, next) {
 
 async function givingUserPermission(req, res, next) {
     try {
-        // Check if a permission called 'user' exists
-        const userPermission = await PermissionsModel.readAllPermissionsModel({ permissionName: 'user' });
-        if (userPermission.length > 0) {
-            req.body.permissionId = userPermission[0].id;
-            next();
-        } else {
-            const newPermission = {
-                permissionName: 'user',
-                canEditCreateAdmins: false,
-                canEditUsersPermissions: false,
-                canAcceptAdoptionRequests: false,
+        const allPermissions = await PermissionsModel.readAllPermissionsModel({ permissionName: 'Supreme' });
+
+        if (!allPermissions.length > 0) {
+            const newSupremePermission = {
+                permissionName: 'Supreme',
+                canEditCreateAdmins: true,
+                canEditUsersPermissions: true,
+                canAcceptAdoptionRequests: true,
                 canAdoptFosterPets: true,
                 canAdoptPets: true
             };
 
-            const createdPermission = await PermissionsModel.addPermissionModel(newPermission);
-            req.body.permissionId = createdPermission.id;
-            console.log('signin login:', req.body);
+            const createdSupremePermission = await PermissionsModel.addPermissionModel(newSupremePermission);
+            req.body.permissionId = createdSupremePermission.id;
+
             next();
+        } else {
+            const userPermission = await PermissionsModel.readAllPermissionsModel({ permissionName: 'User' });
+            if (userPermission.length > 0) {
+                req.body.permissionId = userPermission[0].id;
+                next();
+            } else {
+                const newPermission = {
+                    permissionName: 'User',
+                    canEditCreateAdmins: false,
+                    canEditUsersPermissions: false,
+                    canAcceptAdoptionRequests: false,
+                    canAdoptFosterPets: true,
+                    canAdoptPets: true
+                };
+
+                const createdPermission = await PermissionsModel.addPermissionModel(newPermission);
+                req.body.permissionId = createdPermission.id;
+                console.log('signin login:', req.body);
+                next();
+            }
         }
     } catch (err) {
         console.log(err);
