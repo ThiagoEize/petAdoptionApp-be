@@ -12,15 +12,16 @@ const petsSchema = {
             type: "string",
             enum: ["Adopted", "Fostered", "Available"]
         },
-        picture: { type: "string" },
+        // picture: { type: "string" },
         petAge: { type: "number" },
         height: { type: "number" },
         weight: { type: "number" },
         color: { type: "string" },
+        foodRestrictions: { type: "string", minLength: 6, maxLength: 1000 },
         petBio: { type: "string", minLength: 6, maxLength: 1000 },
         dateCreated: { type: "string" }
     },
-    required: ["breedId", "petName", "adoptionStatus", "picture", "petAge", "height", "weight", "color", "petBio"],
+    required: ["breedId", "petName", "adoptionStatus", "petAge", "height", "weight", "color", "petBio"],
     additionalProperties: false
 };
 

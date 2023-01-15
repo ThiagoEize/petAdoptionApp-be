@@ -21,6 +21,16 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
+const fixRequest = (req, res, next) => {
+    console.log('req body', req);
+    req.body.breedId = parseInt(req.body.breedId)
+    req.body.petAge = parseFloat(req.body.petAge);
+    req.body.height = parseFloat(req.body.height);
+    req.body.weight = parseFloat(req.body.weight);
+
+    next()
+}
+
 const isValidId = async (req, res, next) => {
     const { petId } = req.params;
     const pet = await PetsModel.readPetModel(petId);
@@ -43,4 +53,4 @@ const isNewPet = async (req, res, next) => {
 };
 
 
-module.exports = { isNewPet, isValidId, upload };
+module.exports = { isNewPet, isValidId, fixRequest, upload };

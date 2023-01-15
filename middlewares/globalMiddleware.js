@@ -5,6 +5,12 @@ const PermissionsModel = require('../models/permissionsModel');
 
 function validateBody(schema) {
     return (req, res, next) => {
+        // console.log('that is the request', req);
+        console.log('that is the req body', req.body);
+        // console.log('schema', schema);
+        // if () {
+
+        // }
         const valid = ajv.validate(schema, req.body);
         if (!valid) {
             res.status(400).send(ajv.errors[0].message);
