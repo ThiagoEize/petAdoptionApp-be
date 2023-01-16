@@ -27,7 +27,14 @@ async function readAllPetsModel(query) {
                 'breeds.breedName',
             )
         for (let [key, value] of Object.entries(query)) {
-            if (value[0] === '%') {
+            if (value[0] === '<') {
+                console.log('test <');
+                const searchTerm = value.substring(1, value.length - 1);
+                petsList = petsList.where(key, '<=', searchTerm);
+            } else if (value[0] === '>') {
+                const searchTerm = value.substring(1, value.length - 1);
+                petsList = petsList.where(key, '>=', searchTerm);
+            } else if (value[0] === '%') {
                 const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);
                 petsList = petsList.where(key, 'like', searchTerm);
             } else {
