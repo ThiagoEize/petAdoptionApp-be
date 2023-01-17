@@ -76,7 +76,7 @@ const signup = async (req, res) => {
     try {
         console.log('controller signin:', req.body);
         const user = await UsersModel.addUserModel(req.body);
-        res.send({ id: user.id, ok: true });
+        res.send({ id: user.id, success: true });
     } catch (err) {
         res.status(500).send(err);
     }
@@ -103,7 +103,7 @@ const login = async (req, res) => {
     // }
     try {
         const { user, token } = req.body;
-        res.send({ id: user.id, token: token });
+        res.send({ id: user.id, token: token, success: true });
     } catch (err) {
         res.status(500).send(err);
     }

@@ -75,7 +75,7 @@ async function verifyPassword(req, res, next) {
         const { user, password } = req.body;
         bcrypt.compare(password, user.password, (err, result) => {
             if (result) {
-                const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, { expiresIn: "12h" });
+                const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, { expiresIn: "860800h" });
                 req.body.token = token;
                 next();
             } else {
