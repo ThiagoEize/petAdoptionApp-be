@@ -13,13 +13,14 @@ router.get('/',
     PetsController.getPets
 );
 
-router.get('/:userId',
-    GlobalMiddleware.auth,
-    PetsController.getUserPets
-);
+// router.get('/:userId',
+//     GlobalMiddleware.auth,
+//     PetsController.getUserPets
+// );
 
 router.get('/:petId',
-    GlobalMiddleware.auth, PetsController.getPet
+    GlobalMiddleware.auth,
+    PetsController.getPet
 );
 
 router.post('/',
@@ -32,10 +33,12 @@ router.post('/',
 );
 
 router.put('/:petId',
-    GlobalMiddleware.validateBody(petsSchema),
     GlobalMiddleware.auth,
-    Middleware.isValidId,
     Middleware.isNewPet,
+    Middleware.upload.single('picture'),
+    Middleware.fixRequest,
+    GlobalMiddleware.validateBody(petsSchema),
+    Middleware.isValidId,
     PetsController.editPet
 );
 
