@@ -37,30 +37,9 @@ const auth = async (req, res, next) => {
         if (decoded) {
             const permissions = await PermissionsModel.readUserPermissionModel(decoded.id)
             req.permissions = permissions
-            console.log(req.permissions);
             next();
         }
     });
 };
-
-// const auth = (req, res, next) => {
-//     if (!req.cookies.token) {
-//         res.status(401).send('Must have access token')
-//         return
-//     }
-
-//     jwt.verify(req.cookies.token, process.env.TOKEN_SECRET, (err, decoded) => {
-//         if (err) {
-//             res.status(401).send('Unauthorized');
-//             return;
-//         }
-
-//         if (decoded) {
-//             req.body.userId = decoded.id;
-//             next();
-//             return
-//         }
-//     });
-// };
 
 module.exports = { validateBody, auth };

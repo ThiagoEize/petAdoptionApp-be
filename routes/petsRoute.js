@@ -10,7 +10,8 @@ const router = express.Router();
 
 router.get('/',
     GlobalMiddleware.auth,
-    PetsController.getPets);
+    PetsController.getPets
+);
 
 router.get('/:userId',
     GlobalMiddleware.auth,

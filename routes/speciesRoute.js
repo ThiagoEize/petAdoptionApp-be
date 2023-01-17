@@ -33,5 +33,4 @@ router.delete('/:specieId',
     GlobalMiddleware.auth,
     SpeciesController.deleteSpecie
 );
-
 module.exports = router;
