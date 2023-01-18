@@ -16,6 +16,7 @@ const dbConnection = require('../knex/knex')
 
 async function readAllAdoptionRequestsModel(query) {
     try {
+        console.log('this is my query', query);
         let adoptionRequestsList = dbConnection
             .from('adoptionRequests')
             .join('users', 'users.id', '=', 'adoptionRequests.userId')
@@ -30,6 +31,8 @@ async function readAllAdoptionRequestsModel(query) {
         }
 
         adoptionRequestsList = await adoptionRequestsList.select('adoptionRequests.*', 'users.userName', 'pets.petName');
+
+        console.log('this is my adoptionRequestsList', adoptionRequestsList);
         return adoptionRequestsList;
     } catch (err) {
         console.log(err);
@@ -113,13 +116,14 @@ async function doesAdoptionRequestExistModel(userId, petId) {
     }
 }
 
-async function isNewAdoptionRequestModel(userId, petId, id) {
+async function isNewAdoptionRequestModel(userId, petId, requestType, id) {
     try {
         const query = dbConnection.from('adoptionRequests')
             .where(
                 {
                     userId: userId,
-                    petId: petId
+                    petId: petId,
+                    requestType: requestType
                 }
             );
         if (id) {

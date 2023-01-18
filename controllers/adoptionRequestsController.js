@@ -44,7 +44,7 @@ async function addAdoptionRequest(req, res) {
     try {
         const newAdoptionRequest = req.body;
         const newRegister = await adoptionRequestsModel.addAdoptionRequestModel(newAdoptionRequest);
-        res.send(newRegister);
+        res.send({ success: true, newRegister });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);

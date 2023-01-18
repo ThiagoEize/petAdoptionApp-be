@@ -18,7 +18,8 @@ router.post('/',
     GlobalMiddleware.validateBody(adoptionRequestsSchema),
     GlobalMiddleware.auth,
     Middleware.isNewAdoptionRequest,
-    AdoptionRequestsController.addAdoptionRequest);
+    AdoptionRequestsController.addAdoptionRequest
+);
 router.put('/:adoptionRequestId',
     GlobalMiddleware.validateBody(adoptionRequestsSchema),
     GlobalMiddleware.auth,

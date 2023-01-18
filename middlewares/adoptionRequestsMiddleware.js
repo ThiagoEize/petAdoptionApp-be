@@ -14,8 +14,8 @@ const isValidId = async (req, res, next) => {
 
 const isNewAdoptionRequest = async (req, res, next) => {
     const { adoptionRequestId } = req.params;
-    const { userId, petId } = req.body;
-    const adoptionRequest = await AdoptionRequestsModel.isNewAdoptionRequestModel(userId, petId, adoptionRequestId);
+    const { userId, petId, requestType } = req.body;
+    const adoptionRequest = await AdoptionRequestsModel.isNewAdoptionRequestModel(userId, petId, adoptionRequestId, requestType);
     if (adoptionRequest) {
         res.status(400).send('Pet already adopted');
         return;

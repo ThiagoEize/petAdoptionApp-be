@@ -6,10 +6,10 @@ const adoptionRequestsSchema = {
         petId: { type: "integer" },
         adoptionRequestMessage: { type: "string" },
         requestStatus: { type: "string" },
-
+        requestType: { type: "string" },
         dateCreated: { type: "string" }
     },
-    required: ["userId", "petId", "requestStatus"],
+    required: ["userId", "petId", "requestStatus", "adoptionRequestMessage", "requestType"],
     additionalProperties: false
 };
 
