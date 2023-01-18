@@ -2,18 +2,6 @@ const dbConnection = require('../knex/knex')
 
 async function readAllPetsModel(query) {
     try {
-        // const petsList = await dbConnection.from('pets')
-        //     .leftJoin('breeds', 'breeds.id', '=', 'pets.breedId')
-        //     .leftJoin('species', 'species.id', '=', 'breeds.specieId')
-        //     .leftJoin('users', 'users.id', '=', 'pets.userId')
-        // .select(
-        //     'pets.*',
-        //     'users.userName',
-        //     'species.specieName',
-        //     'breeds.breedName',
-        // )
-        //     .where(query)
-        // return petsList
 
         let petsList = dbConnection
             .from('pets')
@@ -26,13 +14,14 @@ async function readAllPetsModel(query) {
                 'species.specieName',
                 'breeds.breedName',
             )
+
         for (let [key, value] of Object.entries(query)) {
+            console.log('this is the substring', value.substring(1, value.length));
             if (value[0] === '<') {
-                console.log('test <');
-                const searchTerm = value.substring(1, value.length - 1);
+                const searchTerm = value.substring(1, value.length);
                 petsList = petsList.where(key, '<=', searchTerm);
             } else if (value[0] === '>') {
-                const searchTerm = value.substring(1, value.length - 1);
+                const searchTerm = value.substring(1, value.length);
                 petsList = petsList.where(key, '>=', searchTerm);
             } else if (value[0] === '%') {
                 const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);

@@ -65,7 +65,10 @@ async function addPet(req, res) {
 
 async function editPet(req, res) {
     try {
-        const updatedPet = req.body;
+        // const updatedPet = req.body;
+        // console.log('updatedPet', updatedPet);
+        console.log('req.file.path', req.file.path);
+        const updatedPet = { ...req.body, picture: req.file.path };
         const updated = await PetsModel.editPetModel(req.params.petId, updatedPet);
         res.send({
             success: true,

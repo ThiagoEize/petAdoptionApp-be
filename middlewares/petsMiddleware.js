@@ -12,8 +12,10 @@ cloudinary.config({
 });
 
 const storage = new CloudinaryStorage({
+
     cloudinary: cloudinary,
     filename: function (req, file, cb) {
+        console.log(file);
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
     },
@@ -43,7 +45,9 @@ const isValidId = async (req, res, next) => {
 
 const isNewPet = async (req, res, next) => {
     const { petId } = req.params;
+    console.log('is nre pet', req.body);
     const { petName, breedId, color, petBio } = req.body;
+
     const pet = await PetsModel.isNewPetModel(breedId, petName, color, petBio, petId);
     if (pet) {
         res.status(400).send('Pet already exists');
