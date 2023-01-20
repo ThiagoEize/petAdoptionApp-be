@@ -21,7 +21,7 @@ router.post('/',
     AdoptionRequestsController.addAdoptionRequest
 );
 router.put('/:adoptionRequestId',
-    GlobalMiddleware.validateBody(adoptionRequestsSchema),
+    // GlobalMiddleware.validateBody(adoptionRequestsSchema),
     GlobalMiddleware.auth,
     Middleware.isValidId,
     Middleware.isNewAdoptionRequest,

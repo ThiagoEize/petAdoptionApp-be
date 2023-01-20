@@ -85,6 +85,20 @@ async function editPet(req, res) {
     }
 }
 
+async function aprovedAdoption(req, res) {
+    try {
+        const updated = await PetsModel.aproveRequestModal(req.params.petId, req.body);
+        console.log('req body for aproving', req.body);
+        res.send({
+            success: true,
+            data: updated
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}
+
 async function deletePet(req, res) {
     try {
         const deleted = await PetsModel.deletePetModel(req.params.petId);
@@ -98,4 +112,4 @@ async function deletePet(req, res) {
     }
 }
 
-module.exports = { addPet, getPets, getPet, getUserPets, editPet, deletePet }
+module.exports = { addPet, getPets, getPet, getUserPets, editPet, aprovedAdoption, deletePet }

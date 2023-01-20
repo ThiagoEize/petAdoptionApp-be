@@ -109,6 +109,19 @@ async function editPetModel(petId, updatedPet) {
     }
 }
 
+async function aproveRequestModal(petId, updatedPet) {
+    try {
+        await dbConnection('pets')
+            .where('id', petId)
+            .update(updatedPet)
+
+        const updatedRegister = await readPetModel(petId)
+        return updatedRegister
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 async function deletePetModel(petId) {
     try {
         const deleted = await dbConnection.from('pets').where({ id: petId }).del()
@@ -157,6 +170,7 @@ module.exports = {
     readPetModel,
     addPetModel,
     editPetModel,
+    aproveRequestModal,
     doesPetExistModel,
     isNewPetModel,
     readUserPetsModel,

@@ -42,6 +42,12 @@ router.put('/:petId',
     PetsController.editPet
 );
 
+router.put('/aprove/:petId',
+    GlobalMiddleware.auth,
+    Middleware.isValidId,
+    PetsController.aprovedAdoption
+);
+
 router.delete('/:petId',
     GlobalMiddleware.auth,
     PetsController.deletePet
