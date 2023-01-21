@@ -8,29 +8,32 @@ const router = express.Router();
 
 router.get('/',
     GlobalMiddleware.auth,
+    Middleware.canAcess,
     SpeciesController.getSpecies
 );
 router.get('/:specieId',
     GlobalMiddleware.auth,
+    Middleware.canAcess,
     SpeciesController.getSpecie
 );
 router.post('/',
     GlobalMiddleware.validateBody(speciesSchema),
     GlobalMiddleware.auth,
-    Middleware.canAcess,
+    Middleware.canModify,
     Middleware.isNewSpecie,
     SpeciesController.addSpecie
 );
 router.put('/:specieId',
     GlobalMiddleware.validateBody(speciesSchema),
     GlobalMiddleware.auth,
-    Middleware.canAcess,
+    Middleware.canModify,
     Middleware.isValidId,
     Middleware.isNewSpecie,
     SpeciesController.editSpecie
 );
 router.delete('/:specieId',
     GlobalMiddleware.auth,
+    Middleware.canModify,
     SpeciesController.deleteSpecie
 );
 module.exports = router;

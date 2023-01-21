@@ -37,6 +37,11 @@ const auth = async (req, res, next) => {
         if (decoded) {
             const permissions = await PermissionsModel.readUserPermissionModel(decoded.id)
             req.permissions = permissions
+            permissions.canEditCreateAdmins = permissions.canEditCreateAdmins === 1
+            permissions.canEditUserPermissions = permissions.canEditUserPermissions === 1
+            permissions.canAcceptAdoptionRequests = permissions.canAcceptAdoptionRequests === 1
+            permissions.canFosterPets = permissions.canFosterPets === 1
+            permissions.canAdoptPets = permissions.canAdoptPets === 1
             next();
         }
     });

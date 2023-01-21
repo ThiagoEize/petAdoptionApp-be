@@ -33,6 +33,11 @@ async function getUserPermission(req, res) {
     try {
         const userId = req.params.userId;
         const permission = await PermissionsModel.readUserPermissionModel(userId);
+        permission.canEditCreateAdmins = permission.canEditCreateAdmins === 1
+        permission.canEditUserPermissions = permission.canEditUserPermissions === 1
+        permission.canAcceptAdoptionRequests = permission.canAcceptAdoptionRequests === 1
+        permission.canFosterPets = permission.canFosterPets === 1
+        permission.canAdoptPets = permission.canAdoptPets === 1
         res.send({
             success: true,
             data: permission
