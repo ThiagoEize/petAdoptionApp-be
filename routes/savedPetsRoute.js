@@ -18,13 +18,15 @@ router.post('/',
     GlobalMiddleware.validateBody(savedPetsSchema),
     GlobalMiddleware.auth,
     Middleware.isNewSavedPet,
-    SavedPetsController.addSavedPet);
+    SavedPetsController.addSavedPet
+);
 router.put('/:savedPetId',
     GlobalMiddleware.validateBody(savedPetsSchema),
     GlobalMiddleware.auth,
     Middleware.isValidId,
     Middleware.isNewSavedPet,
-    SavedPetsController.editSavedPet);
+    SavedPetsController.editSavedPet
+);
 router.delete('/:savedPetId',
     GlobalMiddleware.auth,
     SavedPetsController.deleteSavedPet

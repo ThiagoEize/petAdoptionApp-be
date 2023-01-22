@@ -44,7 +44,10 @@ async function addSavedPet(req, res) {
     try {
         const newSavedPet = req.body;
         const savedSavedPet = await savedPetsModel.addSavedPetModel(newSavedPet);
-        res.send(savedSavedPet);
+        res.send({
+            success: true,
+            data: savedSavedPet
+        });
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
