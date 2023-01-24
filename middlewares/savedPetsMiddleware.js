@@ -2,6 +2,23 @@ const Ajv = require('ajv');
 const ajv = new Ajv();
 const SavedPetsModel = require('../models/savedPetsModel');
 
+const canAcess = async (req, res, next) => {
+    if (req.permissions.canAdoptPets) {
+        next()
+    } else {
+        res.status(400).send("User doesn't have authorization to access this route");
+    }
+}
+
+const canModify = async (req, res, next) => {
+    if (req.permissions.canAcceptAdoptionRequests) {
+        next()
+    } else {
+        res.status(400).send("User doesn't have authorization to access this route");
+    }
+}
+
+
 const isValidId = async (req, res, next) => {
     const { savedPetId } = req.params;
     const savedPet = await SavedPetsModel.readSavedPetModel(savedPetId);
@@ -23,4 +40,4 @@ const isNewSavedPet = async (req, res, next) => {
     next();
 };
 
-module.exports = { isNewSavedPet, isValidId };
+module.exports = { isNewSavedPet, isValidId, canAcess, canModify };

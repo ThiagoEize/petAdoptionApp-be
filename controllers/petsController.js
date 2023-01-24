@@ -15,6 +15,23 @@ async function getPets(req, res) {
     }
 }
 
+async function getMyPets(req, res) {
+    try {
+        // const query = req.query;
+        const userId = req.loggedInUserId
+
+        let myPets = await PetsModel.readAllMyPetsModel(userId);
+        myPets = myPets.map((pet) => pet.petId)
+        res.send({
+            success: true,
+            data: myPets
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}
+
 async function getPet(req, res) {
     try {
         const pet = await PetsModel.readPetModel(req.params.petId);
@@ -47,7 +64,6 @@ async function addPet(req, res) {
         console.log(req.body);
         const newPet = { ...req.body, picture: req.file.path };
         const savedPet = await PetsModel.addPetModel(newPet);
-        // const savedPet = await PetsModel.addPetModel(req.body);
         if (!savedPet) {
             res.status(400).send('Invalid pet');
             return
@@ -112,4 +128,4 @@ async function deletePet(req, res) {
     }
 }
 
-module.exports = { addPet, getPets, getPet, getUserPets, editPet, aprovedAdoption, deletePet }
+module.exports = { addPet, getPets, getPet, getUserPets, editPet, aprovedAdoption, deletePet, getMyPets }

@@ -1,16 +1,6 @@
 const dbConnection = require('../knex/knex')
 
 async function readAllSavedPetsModel(query) {
-    // try {
-    //     const savedPetsList = await dbConnection.from('savedPets')
-    //         .join('users', 'users.id', '=', 'savedPets.userId')
-    //         .join('pets', 'pets.id', '=', 'savedPets.petId')
-    //         .select('savedPets.*', 'users.userName', 'pets.petName')
-    //         .where(query)
-    //     return savedPetsList
-    // } catch (err) {
-    //     console.log(err);
-    // }
 
     try {
         let savedPetsList = dbConnection

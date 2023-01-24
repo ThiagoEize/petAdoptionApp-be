@@ -10,7 +10,14 @@ const router = express.Router();
 
 router.get('/',
     GlobalMiddleware.auth,
+    Middleware.canAcess,
     PetsController.getPets
+);
+
+router.get('/myPets',
+    GlobalMiddleware.auth,
+    Middleware.canAcess,
+    PetsController.getMyPets
 );
 
 // router.get('/:userId',
@@ -20,11 +27,13 @@ router.get('/',
 
 router.get('/:petId',
     GlobalMiddleware.auth,
+    Middleware.canAcess,
     PetsController.getPet
 );
 
 router.post('/',
     GlobalMiddleware.auth,
+    Middleware.canModify,
     Middleware.isNewPet,
     Middleware.upload.single('picture'),
     Middleware.fixRequest,
@@ -34,6 +43,7 @@ router.post('/',
 
 router.put('/:petId',
     GlobalMiddleware.auth,
+    Middleware.canModify,
     Middleware.isNewPet,
     Middleware.upload.single('picture'),
     Middleware.fixRequest,
@@ -44,12 +54,14 @@ router.put('/:petId',
 
 router.put('/aprove/:petId',
     GlobalMiddleware.auth,
+    Middleware.canModify,
     Middleware.isValidId,
     PetsController.aprovedAdoption
 );
 
 router.delete('/:petId',
     GlobalMiddleware.auth,
+    Middleware.canModify,
     PetsController.deletePet
 );
 

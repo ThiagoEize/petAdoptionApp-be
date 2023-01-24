@@ -33,6 +33,22 @@ const fixRequest = (req, res, next) => {
     next()
 }
 
+const canAcess = async (req, res, next) => {
+    if (req.permissions.canAdoptPets) {
+        next()
+    } else {
+        res.status(400).send("User doesn't have authorization to access this route");
+    }
+}
+
+const canModify = async (req, res, next) => {
+    if (req.permissions.canAcceptAdoptionRequests) {
+        next()
+    } else {
+        res.status(400).send("User doesn't have authorization to access this route");
+    }
+}
+
 const isValidId = async (req, res, next) => {
     const { petId } = req.params;
     const pet = await PetsModel.readPetModel(petId);
@@ -57,4 +73,4 @@ const isNewPet = async (req, res, next) => {
 };
 
 
-module.exports = { isNewPet, isValidId, fixRequest, upload };
+module.exports = { isNewPet, isValidId, fixRequest, canAcess, canModify, upload };

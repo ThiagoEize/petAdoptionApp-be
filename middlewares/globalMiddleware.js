@@ -21,7 +21,6 @@ function validateBody(schema) {
 }
 
 const auth = async (req, res, next) => {
-    console.log('This is my auth', req.headers.authorization);
     if (!req.headers.authorization) {
         res.status(401).send('Authorization headers required');
         return;
@@ -36,12 +35,13 @@ const auth = async (req, res, next) => {
 
         if (decoded) {
             const permissions = await PermissionsModel.readUserPermissionModel(decoded.id)
-            req.permissions = permissions
             permissions.canEditCreateAdmins = permissions.canEditCreateAdmins === 1
             permissions.canEditUserPermissions = permissions.canEditUserPermissions === 1
             permissions.canAcceptAdoptionRequests = permissions.canAcceptAdoptionRequests === 1
             permissions.canFosterPets = permissions.canFosterPets === 1
             permissions.canAdoptPets = permissions.canAdoptPets === 1
+            req.permissions = permissions
+            req.loggedInUserId = decoded.id
             next();
         }
     });
