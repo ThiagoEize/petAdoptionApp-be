@@ -75,6 +75,7 @@ async function addUserModel(newUser) {
 
 async function editUserModel(userId, updatedUser) {
     try {
+        console.log('updatedUser', updatedUser);
         const updated = await dbConnection.from('users')
             .where({ id: userId })
             .update(updatedUser)

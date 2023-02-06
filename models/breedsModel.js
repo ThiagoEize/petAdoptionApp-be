@@ -1,17 +1,5 @@
 const dbConnection = require('../knex/knex')
 
-// async function readAllBreedsModel(query) {
-//     try {
-//         const breedsList = await dbConnection.from('breeds')
-//             .leftJoin('species', 'species.id', '=', 'breeds.specieId')
-//             .select('breeds.*', 'species.specieName')
-//             .where(query)
-//         return breedsList
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
-
 async function readAllBreedsModel(query) {
     try {
         let breedsList = dbConnection
@@ -66,7 +54,6 @@ async function addBreedModel(newBreed) {
         const [id] = await dbConnection('breeds')
             .insert(newBreed)
         const newRegister = await readBreedModel(id)
-        console.log('breedsModel', newRegister)
         return newRegister
     } catch (err) {
         console.log(err);

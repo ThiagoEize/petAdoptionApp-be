@@ -27,15 +27,14 @@ function hashPwd(req, res, next) {
             return;
         }
         req.body.password = hash;
-        // console.log(hash);
         next();
     });
 }
 
 const isValidId = async (req, res, next) => {
     const { userId } = req.params;
+    console.log('userId', userId);
     const user = await UsersModel.readUserModel(userId);
-    // console.log(user);
     if (!user) {
         res.status(400).send('There is existing user with selected');
         return;
@@ -46,6 +45,7 @@ const isValidId = async (req, res, next) => {
 const isNewUser = async (req, res, next) => {
     const { userId } = req.params;
     const { email } = req.body;
+    console.log('req.body', req.body);
     const user = await UsersModel.isNewUserModel(email, userId);
     if (user) {
         res.status(400).send('User already exists');
@@ -129,7 +129,6 @@ async function givingUserPermission(req, res, next) {
 
                 const createdPermission = await PermissionsModel.addPermissionModel(newPermission);
                 req.body.permissionId = createdPermission.id;
-                console.log('signin login:', req.body);
                 next();
             }
         }

@@ -36,24 +36,11 @@ const getUser = async (req, res) => {
     }
 }
 
-// const addUser = async (req, res) => {
-//     try {
-//         const newUser = req.body;
-//         const userAdded = await UsersModel.addUserModel(newUser);
-//         console.log(userAdded)
-//         if (userAdded) {
-//             res.send(newUser);
-//         }
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).send(err);
-//     }
-// }
-
 const editUser = async (req, res) => {
     try {
         const updatedUser = req.body;
         const updated = await UsersModel.editUserModel(req.params.userId, updatedUser);
+        console.log('updated', updated);
         res.send({
             success: true,
             data: updated
@@ -83,24 +70,6 @@ const signup = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    // const { password, user } = req.body;
-    // try {
-    //     console.log('login', user)
-    //     console.log('login', password)
-    //     bcrypt.compare(password, user.password, (err, result) => {
-    //         if (err) {
-    //             res.status(500).send(err);
-    //         } else if (!result) {
-    //             res.status(400).send("Password don't match");
-    //         } else {
-    //             const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
-    //            
-    //             res.send({ token: token, userName: user.userName });
-    //         }
-    //     });
-    // } catch (err) {
-    //     res.status(500).send(err);
-    // }
     try {
         const { user, token } = req.body;
         res.send({ id: user.id, token: token, success: true });
@@ -109,24 +78,5 @@ const login = async (req, res) => {
     }
 
 };
-
-// const login = async (req, res) => {
-//     const { password, user } = req.body;
-//     try {
-//         bcrypt.compare(password, user.password, (err, result) => {
-//             if (err) {
-//                 res.status(500).send(err);
-//             } else if (!result) {
-//                 res.status(400).send("Password don't match");
-//             } else {
-//                 const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
-//                 res.cookie('token', token, { maxAge: 86000000, httpOnly: true });
-//                 res.send({ ok: true, userId: user.id });
-//             }
-//         });
-//     } catch (err) {
-//         res.status(500).send(err);
-//     }
-// };
 
 module.exports = { getUsers, getUser, editUser, deleteUser, signup, login }

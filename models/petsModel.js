@@ -16,7 +16,6 @@ async function readAllPetsModel(query) {
             )
 
         for (let [key, value] of Object.entries(query)) {
-            console.log('this is the substring', value.substring(1, value.length));
             if (value[0] === '<') {
                 const searchTerm = value.substring(1, value.length);
                 petsList = petsList.where(key, '<=', searchTerm);
@@ -50,23 +49,6 @@ async function readAllMyPetsModel(userId) {
         let myPetsIdsList = dbConnection
             .from('savedPets')
             .where({ userId })
-        // for (let [key, value] of Object.entries(query)) {
-        //     console.log('this is the substring', value.substring(1, value.length));
-        //     if (value[0] === '<') {
-        //         const searchTerm = value.substring(1, value.length);
-        //         petsList = petsList.where(key, '<=', searchTerm);
-        //     } else if (value[0] === '>') {
-        //         const searchTerm = value.substring(1, value.length);
-        //         petsList = petsList.where(key, '>=', searchTerm);
-        //     } else if (value[0] === '%') {
-        //         const searchTerm = value.substring(0, value.lastIndexOf('%') + 1);
-        //         petsList = petsList.where(key, 'like', searchTerm);
-        //     } else {
-        //         petsList = petsList.where(key, value);
-        //     }
-        // }
-
-
         return myPetsIdsList.select('petId')
     } catch (err) {
         console.log(err);

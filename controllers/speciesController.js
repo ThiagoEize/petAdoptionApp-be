@@ -32,7 +32,6 @@ async function getSpecie(req, res) {
 async function addSpecie(req, res) {
     try {
         const newSpecie = req.body;
-        // console.log(req.body)
         const savedSpecie = await SpeciesModel.addSpecieModel(newSpecie);
         res.send({
             success: true,

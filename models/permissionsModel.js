@@ -1,14 +1,5 @@
 const dbConnection = require('../knex/knex')
 
-// async function readAllPermissionsModel(query) {
-//     try {
-//         const permissionsList = await dbConnection.from('permissions').where(query);
-//         return permissionsList
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
-
 async function readAllPermissionsModel(query) {
     try {
         let permissionsList = dbConnection.from('permissions');

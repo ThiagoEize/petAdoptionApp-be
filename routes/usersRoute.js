@@ -9,7 +9,15 @@ const router = express.Router();
 
 ///Add Validation Middleware to POST/PUT routes
 
-router.get('/', UsersController.getUsers);
+router.get('/',
+    GlobalMiddleware.auth,
+    UsersController.getUsers
+);
+
+router.get('/:userId',
+    GlobalMiddleware.auth,
+    UsersController.getUser
+);
 
 router.post('/login',
     GlobalMiddleware.validateBody(userLoginsSchema),
@@ -29,6 +37,7 @@ router.post('/signup',
 
 router.put('/:userId',
     GlobalMiddleware.validateBody(usersSchema),
+    GlobalMiddleware.auth,
     Middleware.isValidId,
     Middleware.isNewUser,
     UsersController.editUser

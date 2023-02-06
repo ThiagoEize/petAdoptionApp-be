@@ -5,12 +5,6 @@ const PermissionsModel = require('../models/permissionsModel');
 
 function validateBody(schema) {
     return (req, res, next) => {
-        // console.log('that is the request', req);
-        console.log('that is the req body', req.body);
-        // console.log('schema', schema);
-        // if () {
-
-        // }
         const valid = ajv.validate(schema, req.body);
         if (!valid) {
             res.status(400).send(ajv.errors[0].message);
@@ -28,7 +22,6 @@ const auth = async (req, res, next) => {
     const token = req.headers.authorization.replace('Bearer ', '');
     jwt.verify(token, process.env.TOKEN_SECRET, async (err, decoded) => {
         if (err) {
-            // console.log(res)
             res.status(401).send('Unauthorized');
             return;
         }

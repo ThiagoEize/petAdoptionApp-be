@@ -34,7 +34,6 @@ const addDietaryRestriction = async (req, res) => {
     try {
         const newDietaryRestriction = req.body;
         const dietaryRestrictionAdded = await DietaryRestrictionsModel.addDietaryRestrictionModel(newDietaryRestriction);
-        console.log('updateDietaryRestrictionController', dietaryRestrictionAdded)
         if (dietaryRestrictionAdded) {
             res.send({
                 success: true,

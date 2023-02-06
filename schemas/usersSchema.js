@@ -14,7 +14,7 @@ const usersSchema = {
         userBio: { type: "string" },
         dateCreated: { type: "string" }
     },
-    required: ["permissionId", "email", "password", "userName", "userLastName", "phoneNumber", "userBio"],
+    required: ["email", "password", "userName", "userLastName", "phoneNumber", "userBio"],
     additionalProperties: false
 };
 

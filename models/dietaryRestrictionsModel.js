@@ -1,17 +1,5 @@
 const dbConnection = require('../knex/knex')
 
-// async function readAllDietaryRestrictionsModel(query) {
-//     try {
-//         const dietaryRestrictionsList = await dbConnection.from('dietaryRestrictions')
-//             .leftJoin('pets', 'pets.id', '=', 'dietaryRestrictions.petId')
-//             .select('dietaryRestrictions.*', 'pets.petName')
-//             .where(query)
-//         return dietaryRestrictionsList
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
-
 async function readAllDietaryRestrictionsModel(query) {
     try {
         let dietaryRestrictionsList = dbConnection
@@ -66,7 +54,6 @@ async function addDietaryRestrictionModel(newDietaryRestriction) {
         const [id] = await dbConnection('dietaryRestrictions')
             .insert(newDietaryRestriction)
         const newRegister = await readDietaryRestrictionModel(id)
-        console.log('dietaryRestrictionsModel', newRegister)
         return newRegister
     } catch (err) {
         console.log(err);
