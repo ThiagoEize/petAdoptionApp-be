@@ -33,6 +33,7 @@ function hashPwd(req, res, next) {
 
 const isValidId = async (req, res, next) => {
     const { userId } = req.params;
+
     console.log('userId', userId);
     const user = await UsersModel.readUserModel(userId);
     if (!user) {

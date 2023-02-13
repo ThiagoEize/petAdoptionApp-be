@@ -21,6 +21,7 @@ const getUsers = async (req, res) => {
 const getUser = async (req, res) => {
     try {
         const { userId } = req.params;
+
         const user = await UsersModel.readUserModel(userId);
         if (user) {
             res.send({

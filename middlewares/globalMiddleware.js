@@ -15,6 +15,7 @@ function validateBody(schema) {
 }
 
 const auth = async (req, res, next) => {
+
     if (!req.headers.authorization) {
         res.status(401).send('Authorization headers required');
         return;
