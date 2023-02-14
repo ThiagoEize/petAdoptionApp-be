@@ -19,21 +19,21 @@ router.get('/:savedPetId',
 router.post('/',
     GlobalMiddleware.validateBody(savedPetsSchema),
     GlobalMiddleware.auth,
-    Middleware.canModify,
+    Middleware.canAcess,
     Middleware.isNewSavedPet,
     SavedPetsController.addSavedPet
 );
 router.put('/:savedPetId',
     GlobalMiddleware.validateBody(savedPetsSchema),
     GlobalMiddleware.auth,
-    Middleware.canModify,
+    Middleware.canAcess,
     Middleware.isValidId,
     Middleware.isNewSavedPet,
     SavedPetsController.editSavedPet
 );
 router.delete('/:savedPetId',
     GlobalMiddleware.auth,
-    Middleware.canModify,
+    Middleware.canAcess,
     SavedPetsController.deleteSavedPet
 );
 
