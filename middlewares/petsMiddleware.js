@@ -29,7 +29,6 @@ const fixRequest = (req, res, next) => {
     req.body.petAge = parseFloat(req.body.petAge);
     req.body.height = parseFloat(req.body.height);
     req.body.weight = parseFloat(req.body.weight);
-
     next()
 }
 
